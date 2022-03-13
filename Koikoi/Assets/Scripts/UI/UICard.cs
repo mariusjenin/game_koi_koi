@@ -5,34 +5,30 @@ using UnityEngine.UI;
 
 public class UICard : MonoBehaviour
 {
-    private bool visible;
+    private Hand hand;
     private Card card;
     private Image image;
 
     private void Start()
     {
-        GetComponent<Button>().onClick.AddListener(OnClick);
+        if (hand is Player) GetComponent<Button>().onClick.AddListener(OnClick);
+        else if(hand is AI) Destroy(gameObject.GetComponent<Button>());
         image = GetComponent<Image>();
     }
-    public void Init(bool visible, Card card)
+    public void Init(Hand hand, Card card)
     {
-        this.visible = visible;
+        this.hand = hand;
         this.card = card;
     }
 
     public void Display()
     {
-        if (visible) image.sprite = card.sprite;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (hand is Player || hand is Board) 
+            image.sprite = card.sprite;
     }
 
     void OnClick()
     {
-        Debug.Log(card.id);
+        ((Player)hand).SelectCard(card);
     }
 }
