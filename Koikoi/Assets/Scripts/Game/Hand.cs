@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Hand : MonoBehaviour
 {
+    public Deck deck;
     [System.NonSerialized]
     public List<Card> Cards = new List<Card>();
 

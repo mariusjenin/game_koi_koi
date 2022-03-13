@@ -61,9 +61,9 @@ public class UIManager : MonoBehaviour
     {
         for (int i = 0; i < 8; i++)
         {
-            yield return StartCoroutine(NewCard(player, debugCard));
-            yield return StartCoroutine(NewCard(ai, debugCard));
-            yield return StartCoroutine(NewCard(board, debugCard));
+            yield return StartCoroutine(NewCard(player));
+            yield return StartCoroutine(NewCard(ai));
+            yield return StartCoroutine(NewCard(board));
         }
         NextTurn();
         player.CanPlay = true;
@@ -90,13 +90,14 @@ public class UIManager : MonoBehaviour
         else AIScore.SetText("" + score);
     }
 
-    private IEnumerator NewCard(Hand hand, Card card)
+    private IEnumerator NewCard(Hand hand)
     {
         yield return new WaitForSeconds(0.02f);
+
         // Création d'un template image à la position du deck
         GameObject image = Instantiate(template, Deck.transform.position, Deck.transform.rotation); // Utiliser card.image et faire animation
         image.transform.SetParent(Deck.transform.parent.transform);
-        image.GetComponent<UICard>().Init(hand, card);
+        image.GetComponent<UICard>().Init(hand, hand.deck.Draw());
         
 
         // Animation
@@ -107,7 +108,7 @@ public class UIManager : MonoBehaviour
         else if (hand is Board)
             yield return StartCoroutine(AddCardCouroutine(image.transform, BoardGrid.transform)); // Déplacement vers Board
         image.GetComponent<UICard>().Display();
-        hand.AddCard(card);
+        hand.AddCard(hand.deck.Draw());
     }
 
     private IEnumerator AddCardCouroutine(Transform initial, Transform destination)

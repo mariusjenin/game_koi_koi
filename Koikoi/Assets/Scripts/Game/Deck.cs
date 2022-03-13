@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class Deck : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public List<Card> Cards;
 
-    // Update is called once per frame
-    void Update()
+    public Card Draw()
     {
-        
+        int random = Random.Range(0,Cards.Count);
+        return Cards[random];
     }
 }
