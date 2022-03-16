@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Game;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UICard : MonoBehaviour
 {
-    private Hand hand;
+    private CardZone hand;
     private Card card;
     private Image image;
 
@@ -15,9 +16,9 @@ public class UICard : MonoBehaviour
         else if(hand is AI) Destroy(gameObject.GetComponent<Button>());
         image = GetComponent<Image>();
     }
-    public void Init(Hand hand, Card card)
+    public void Init(CardZone cz, Card card)
     {
-        this.hand = hand;
+        this.hand = cz;
         this.card = card;
     }
 

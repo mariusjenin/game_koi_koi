@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Game;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,6 +26,7 @@ public class UIManager : MonoBehaviour
     public GameObject AIGrid;
     public GameObject BoardGrid;
 
+    public Deck deck;
     public Player player;
     public AI ai;
     public Board board;
@@ -90,26 +92,26 @@ public class UIManager : MonoBehaviour
         else AIScore.SetText("" + score);
     }
 
-    private IEnumerator NewCard(Hand hand)
+    private IEnumerator NewCard(CardZone cz)
     {
         yield return new WaitForSeconds(0.02f);
 
         // Cr�ation d'un template image � la position du deck
         GameObject image = Instantiate(template, Deck.transform.position, Deck.transform.rotation); // Utiliser card.image et faire animation
         image.transform.SetParent(Deck.transform.parent.transform);
-        Card card = hand.deck.Draw();
-        image.GetComponent<UICard>().Init(hand, card);
+        Card card = deck.Draw();
+        image.GetComponent<UICard>().Init(cz, card);
         
 
         // Animation
-        if(hand is Player)
+        if(cz is Player)
             yield return StartCoroutine(AddCardCouroutine(image.transform, PlayerGrid.transform)); // D�placement vers Player
-        else if(hand is AI)
+        else if(cz is AI)
             yield return StartCoroutine(AddCardCouroutine(image.transform, AIGrid.transform)); // D�placement vers AI
-        else if (hand is Board)
+        else if (cz is Board)
             yield return StartCoroutine(AddCardCouroutine(image.transform, BoardGrid.transform)); // D�placement vers Board
         image.GetComponent<UICard>().Display();
-        hand.AddCard(card);
+        cz.AddCard(card);
     }
 
     private IEnumerator AddCardCouroutine(Transform initial, Transform destination)

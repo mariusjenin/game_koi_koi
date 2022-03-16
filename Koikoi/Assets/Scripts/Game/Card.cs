@@ -5,13 +5,52 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Card", menuName = "Card")]
 public class Card : ScriptableObject
 {
-    // public enum MONTH
-    // {
-    //     JAN, FEB
-    // };
-    //
-    // public MONTH month;
+    public enum Month
+    {
+        January,
+        February,
+        March,
+        April,
+        May,
+        June,
+        July,
+        August,
+        September,
+        October,
+        November,
+        December
+    }
+    
+    public enum Type
+    {
+        Hikari,
+        Tane,
+        Tan,
+        Kasu
+    }
+    
+    public enum Specificity
+    {
+        ClassicLight,
+        RainyLight,
+        FlowerLight,
+        MoonLight,
+        ClassicTane,
+        SakeTane,
+        BoarTane,
+        DeerTane,
+        ButterflyTane,
+        RedTan,
+        BlueTan,
+        WrittenTan,
+        ClassicKasu
+    }
+
+
+    public Month month;
+    public Type type;
     public int id;
     public Sprite sprite;
+    public Specificity specificity;
 
 }

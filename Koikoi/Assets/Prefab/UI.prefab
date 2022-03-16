@@ -166,6 +166,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b96edb2863d9b3428aa0d74d13f8f7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Cards:
+  - {fileID: 11400000, guid: 23d56f515a5d0f141801895e604bdfc1, type: 2}
+  - {fileID: 11400000, guid: 434b9b17c5a4c5d4aa6f1c273118e7ec, type: 2}
+  - {fileID: 11400000, guid: 2fb694d5e8bd3b448880417e942c6477, type: 2}
+  - {fileID: 11400000, guid: 9db0d4e0e1095ae499cf63923215efc5, type: 2}
+  - {fileID: 11400000, guid: df670881523ba54498e221323413c548, type: 2}
+  - {fileID: 11400000, guid: 6443595eaa631a5488f126e33cfd4ada, type: 2}
+  - {fileID: 11400000, guid: 011309ca3caa51340a708edfeffc5f62, type: 2}
+  - {fileID: 11400000, guid: 48fea21f24bde1c41aec7a5d201e0d76, type: 2}
+  - {fileID: 11400000, guid: 50ed48ca94b23944fbd7b528eb87d70e, type: 2}
+  - {fileID: 11400000, guid: d2019206849b9e0429be5a34c2ccd860, type: 2}
+  - {fileID: 11400000, guid: f4037777ce00e97429abe42deec6b175, type: 2}
+  - {fileID: 11400000, guid: 421d21cbb30f64d4bbe9b5ae912b78ee, type: 2}
+  - {fileID: 11400000, guid: 7aa7664b16b3c234698b85d65ecd9c26, type: 2}
+  - {fileID: 11400000, guid: e9594e0892a2edc4eb118b344c21f7ee, type: 2}
+  - {fileID: 11400000, guid: 4901c3ec912b31541bfc7623dddd42f6, type: 2}
+  - {fileID: 11400000, guid: 3935652e1a0750f408b644c766adbc53, type: 2}
+  - {fileID: 11400000, guid: e98580317e9db23499e0183ac8650a5f, type: 2}
+  - {fileID: 11400000, guid: 6f72ca8feb2f3b5498aae53db1e7bf2a, type: 2}
+  - {fileID: 11400000, guid: 84a1fc853d4d9c2429c0d5d1d2154fdf, type: 2}
+  - {fileID: 11400000, guid: 0705e9bb5bc10074a8ce0a7dbd63f380, type: 2}
+  - {fileID: 11400000, guid: e972742f4201dc24eb13c50c27c2b780, type: 2}
+  - {fileID: 11400000, guid: 192967f0c13d9454f9321a4833247469, type: 2}
+  - {fileID: 11400000, guid: 07ac2a8e8d76e6e4eb5385a3bab42257, type: 2}
+  - {fileID: 11400000, guid: e0656062d2363a44a95b63670fd0bec9, type: 2}
+  - {fileID: 11400000, guid: b4e6cdd8f060bc341b355fcfc417e965, type: 2}
+  - {fileID: 11400000, guid: d52a45ea9017634489b11dea4b0d6517, type: 2}
+  - {fileID: 11400000, guid: 992436688f895a34890fd749ef8b838d, type: 2}
+  - {fileID: 11400000, guid: 6a20f9abdc7b2454386debd85d13c95d, type: 2}
+  - {fileID: 11400000, guid: ec02aacdaf7e5244094c6b323689c10a, type: 2}
+  - {fileID: 11400000, guid: d6fa7ef17e185c543952aec9264cef86, type: 2}
+  - {fileID: 11400000, guid: d3f03845ebdfc3f42b62fcee9337de17, type: 2}
+  - {fileID: 11400000, guid: 53f8b78c431a0e04e8c6ca7338f91258, type: 2}
+  - {fileID: 11400000, guid: 6293cc8ee4d71aa43b2dc6fa194c19a2, type: 2}
+  - {fileID: 11400000, guid: 6f685f4f1206d924d8643de40f34de02, type: 2}
+  - {fileID: 11400000, guid: 761923683c0af4442a8838f26d0572f8, type: 2}
+  - {fileID: 11400000, guid: f145833e77ec3be45a681d12ccd8df64, type: 2}
+  - {fileID: 11400000, guid: d74a77a56f3d9c14e84981679fbee545, type: 2}
+  - {fileID: 11400000, guid: 36bd818a2000c9541beb551326236d20, type: 2}
+  - {fileID: 11400000, guid: 318541d0c982c9c48a0ce2fe86b25a51, type: 2}
+  - {fileID: 11400000, guid: 90254bb572983c849a80ec4a12b1451b, type: 2}
+  - {fileID: 11400000, guid: b51744f5832d4a841957f895560434b2, type: 2}
+  - {fileID: 11400000, guid: c1a738846a7c8444bbc2c86d1cedeed6, type: 2}
+  - {fileID: 11400000, guid: 9a33f7e96355a324bbf25910ffecb25f, type: 2}
+  - {fileID: 11400000, guid: f06f03d2047f75e4ebea97ddd9720aa6, type: 2}
+  - {fileID: 11400000, guid: 479c6c6944260424a85627f40c11045b, type: 2}
+  - {fileID: 11400000, guid: c10f3abee89ca464da8710638fd09dae, type: 2}
+  - {fileID: 11400000, guid: 95244b04a15d35641b8d3444daa8ae33, type: 2}
+  - {fileID: 11400000, guid: 197860b6d0178b74f874880ad683ac56, type: 2}
 --- !u!114 &1129414356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -989,6 +1038,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74bf91961b134a04ba6b8973ed376ea4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deck: {fileID: 1129414355}
 --- !u!1 &8685773497663584218
 GameObject:
   m_ObjectHideFlags: 0
@@ -2693,6 +2743,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b86e21c4692e6d48b00fc3ea661afa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deck: {fileID: 1129414355}
   CanPlay: 0
 --- !u!1 &8685773498855080465
 GameObject:
@@ -3661,6 +3712,7 @@ MonoBehaviour:
   PlayerGrid: {fileID: 8685773498751245707}
   AIGrid: {fileID: 8685773497655673043}
   BoardGrid: {fileID: 8685773498402410310}
+  deck: {fileID: 1129414355}
   player: {fileID: 1105741758}
   ai: {fileID: 1892856787}
   board: {fileID: 657458355}

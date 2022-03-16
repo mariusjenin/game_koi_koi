@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Game;
 using UnityEngine;
 
-public class Deck : MonoBehaviour
+public class Deck : CardZone
 {
     public List<Card> Cards;
 
