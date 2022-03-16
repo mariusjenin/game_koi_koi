@@ -9,6 +9,8 @@ public class Deck : MonoBehaviour
     public Card Draw()
     {
         int random = Random.Range(0,Cards.Count);
-        return Cards[random];
+        Card tmp = Cards[random];
+        Cards.RemoveAt(random);
+        return tmp;
     }
 }

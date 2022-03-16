@@ -69,7 +69,7 @@ public class UIManager : MonoBehaviour
         player.CanPlay = true;
     }
 
-    // Fonction incrémentant le tour et renvoyant la valeur du nouveau tour 
+    // Fonction incrï¿½mentant le tour et renvoyant la valeur du nouveau tour 
     int NextTurn()
     {
         int CurrentTurn = Int32.Parse(Turn.text); 
@@ -83,7 +83,7 @@ public class UIManager : MonoBehaviour
         return CurrentTurn;
     }
 
-    // Fonction mettant à jour le score du joueur ou de l'IA
+    // Fonction mettant ï¿½ jour le score du joueur ou de l'IA
     void UpdateScore(bool player, int score)
     {
         if (player) PlayerScore.SetText("" + score);
@@ -94,21 +94,22 @@ public class UIManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.02f);
 
-        // Création d'un template image à la position du deck
+        // Crï¿½ation d'un template image ï¿½ la position du deck
         GameObject image = Instantiate(template, Deck.transform.position, Deck.transform.rotation); // Utiliser card.image et faire animation
         image.transform.SetParent(Deck.transform.parent.transform);
-        image.GetComponent<UICard>().Init(hand, hand.deck.Draw());
+        Card card = hand.deck.Draw();
+        image.GetComponent<UICard>().Init(hand, card);
         
 
         // Animation
         if(hand is Player)
-            yield return StartCoroutine(AddCardCouroutine(image.transform, PlayerGrid.transform)); // Déplacement vers Player
+            yield return StartCoroutine(AddCardCouroutine(image.transform, PlayerGrid.transform)); // Dï¿½placement vers Player
         else if(hand is AI)
-            yield return StartCoroutine(AddCardCouroutine(image.transform, AIGrid.transform)); // Déplacement vers AI
+            yield return StartCoroutine(AddCardCouroutine(image.transform, AIGrid.transform)); // Dï¿½placement vers AI
         else if (hand is Board)
-            yield return StartCoroutine(AddCardCouroutine(image.transform, BoardGrid.transform)); // Déplacement vers Board
+            yield return StartCoroutine(AddCardCouroutine(image.transform, BoardGrid.transform)); // Dï¿½placement vers Board
         image.GetComponent<UICard>().Display();
-        hand.AddCard(hand.deck.Draw());
+        hand.AddCard(card);
     }
 
     private IEnumerator AddCardCouroutine(Transform initial, Transform destination)

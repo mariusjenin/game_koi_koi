@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e0173cab331a0594b9278d51670cc646, type: 3}
-  m_Name: Hikari_3_4
+  m_Name: Kasu_12_2
   m_EditorClassIdentifier: 
   id: 0
-  sprite: {fileID: 21300000, guid: d7cb47a5322f4914ab4b28ac3ea7acfe, type: 3}
+  sprite: {fileID: 21300000, guid: 9b747f4d18b16d84fad9f603ee6236b8, type: 3}
