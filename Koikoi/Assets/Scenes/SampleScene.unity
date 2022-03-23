@@ -376,22 +376,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1079016805 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8321246790894462666, guid: e8837852f0dac4e4ba014d7ec91ba415, type: 3}
-  m_PrefabInstance: {fileID: 1418508960}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1155827651 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1129414355, guid: 5db4fc65af6f77f42bb296366661e64a, type: 3}
-  m_PrefabInstance: {fileID: 1286141834}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b96edb2863d9b3428aa0d74d13f8f7a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1286141834
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -399,42 +383,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 236492246}
     m_Modifications:
-    - target: {fileID: 657458355, guid: 5db4fc65af6f77f42bb296366661e64a, type: 3}
-      propertyPath: deck
-      value: 
-      objectReference: {fileID: 1155827651}
-    - target: {fileID: 1105741758, guid: 5db4fc65af6f77f42bb296366661e64a, type: 3}
-      propertyPath: deck
-      value: 
-      objectReference: {fileID: 1155827651}
-    - target: {fileID: 1129414355, guid: 5db4fc65af6f77f42bb296366661e64a, type: 3}
-      propertyPath: Cards.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1129414355, guid: 5db4fc65af6f77f42bb296366661e64a, type: 3}
-      propertyPath: Cards.Array.data[0]
-      value: 
-      objectReference: {fileID: 11400000, guid: 56ff945f56135f64fa146beab70ce302, type: 2}
-    - target: {fileID: 1129414355, guid: 5db4fc65af6f77f42bb296366661e64a, type: 3}
-      propertyPath: Cards.Array.data[1]
-      value: 
-      objectReference: {fileID: 11400000, guid: ad198ea1008b51a4699c2d2e02232f31, type: 2}
-    - target: {fileID: 1129414355, guid: 5db4fc65af6f77f42bb296366661e64a, type: 3}
-      propertyPath: Cards.Array.data[2]
-      value: 
-      objectReference: {fileID: 11400000, guid: 970fd4209cdaa38408664647b5f2c497, type: 2}
-    - target: {fileID: 1129414355, guid: 5db4fc65af6f77f42bb296366661e64a, type: 3}
-      propertyPath: Cards.Array.data[3]
-      value: 
-      objectReference: {fileID: 11400000, guid: 970fd4209cdaa38408664647b5f2c497, type: 2}
-    - target: {fileID: 1532202900, guid: 5db4fc65af6f77f42bb296366661e64a, type: 3}
-      propertyPath: template
-      value: 
-      objectReference: {fileID: 1079016805}
-    - target: {fileID: 1892856787, guid: 5db4fc65af6f77f42bb296366661e64a, type: 3}
-      propertyPath: deck
-      value: 
-      objectReference: {fileID: 1155827651}
     - target: {fileID: 857630988807266425, guid: 5db4fc65af6f77f42bb296366661e64a, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

@@ -6,10 +6,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
     // Singleton
-    public static UIManager instance;
+    public static GameManager instance;
 
     // Values
     public int MaxTurn = 12;
