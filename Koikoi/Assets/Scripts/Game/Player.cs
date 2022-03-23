@@ -7,7 +7,6 @@ public class Player :  Hand
     public Board Board;
 
     public Card selectedCard;
-    public bool canPlay = false;
 
 
     public void SelectCard(Card card)
@@ -17,14 +16,14 @@ public class Player :  Hand
             // Le Joueur n'avait pas de carte sélectionné
             if(selectedCard == null)
             {
-                GameManager.FadeInGame();
+                GameManager.instance.FadeInGame();
                 selectedCard = card;
                 Board.DisplayAssociableCards(selectedCard);
             }
             // Le Joueur retire la sélection de sa carte
             else if (card.Equals(selectedCard))
             {
-                GameManager.FadeOutGame();
+                GameManager.instance.FadeOutGame();
                 selectedCard = null;
             }
             // Le Joueur sélectionne une autre carte
@@ -36,11 +35,11 @@ public class Player :  Hand
         }
     }
 
-    public void CanPlay(bool canPlay)
+    public override void CanPlay(bool canPlay)
     {
-        this.canPlay = canPlay;
+        base.CanPlay(canPlay);
 
-        if (canPlay) GameManager.ActivateButtons();
-        else GameManager.DesactivateButtons();
+        if (canPlay) GameManager.instance.ActivateButtons();
+        else GameManager.instance.DesactivateButtons();
     }
 }

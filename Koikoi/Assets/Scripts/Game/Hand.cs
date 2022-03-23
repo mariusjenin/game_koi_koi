@@ -9,6 +9,12 @@ public class Hand : CardZone
     public Deck deck;
     public ZoneYakus yakus;
 
+    protected bool canPlay = false;
+    public virtual void CanPlay(bool canPlay)
+    {
+        this.canPlay = canPlay;
+    }
+
     public void AddCardToYakus(Card card)
     {
         Destroy(card.GetUI().GetComponent<Button>());
@@ -18,16 +24,16 @@ public class Hand : CardZone
         switch (card.type)
         {
             case Card.Type.Hikari:
-                StartCoroutine(GameManager.AddCardCouroutine(card.GetUI().transform, yakus.HikariGrid.transform));
+                StartCoroutine(GameManager.instance.AddCardCouroutine(card.GetUI().transform, yakus.HikariGrid.transform));
                 break;
             case Card.Type.Kasu:
-                StartCoroutine(GameManager.AddCardCouroutine(card.GetUI().transform, yakus.KasuGrid.transform));
+                StartCoroutine(GameManager.instance.AddCardCouroutine(card.GetUI().transform, yakus.KasuGrid.transform));
                 break;
             case Card.Type.Tan:
-                StartCoroutine(GameManager.AddCardCouroutine(card.GetUI().transform, yakus.TanGrid.transform));
+                StartCoroutine(GameManager.instance.AddCardCouroutine(card.GetUI().transform, yakus.TanGrid.transform));
                 break;
             case Card.Type.Tane:
-                StartCoroutine(GameManager.AddCardCouroutine(card.GetUI().transform, yakus.TaneGrid.transform));
+                StartCoroutine(GameManager.instance.AddCardCouroutine(card.GetUI().transform, yakus.TaneGrid.transform));
                 break;
         }
     }

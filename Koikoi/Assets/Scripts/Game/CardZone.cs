@@ -6,7 +6,6 @@ namespace Game
 {
     public class CardZone: MonoBehaviour
     {
-        public GameManager GameManager;
 
         [SerializeField]
         protected List<Card> Cards = new List<Card>();

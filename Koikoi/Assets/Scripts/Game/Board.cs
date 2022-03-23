@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Board : CardZone
 {
-    public Player Player;
     public void DisplayAssociableCards(Card card)
     {
         Cards.ForEach(c =>

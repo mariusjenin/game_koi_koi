@@ -42,13 +42,21 @@ public class UICard : MonoBehaviour
     }
     void OnClickBoard()
     {
-        Player player = ((Board)cardZone).Player;
+        Player player = GameManager.instance.player;
+        AI ai = GameManager.instance.ai;
 
+        // Ajout des 2 cartes au Yakus du joueur
         ((Board)cardZone).AddCardsToYakus(card, player.selectedCard, player);
 
-        player.GameManager.FadeOutGame();
-        player.selectedCard = null;
-        player.CanPlay(false);
+        // Réinitialisation 
+        GameManager.instance.FadeOutGame();
+        GameManager.instance.player.selectedCard = null;
+
+        // Au tour de l'IA de jouer
+        GameManager.instance.player.CanPlay(false);
+        GameManager.instance.ai.CanPlay(true);
+
+
     }
 
     public void Show()
