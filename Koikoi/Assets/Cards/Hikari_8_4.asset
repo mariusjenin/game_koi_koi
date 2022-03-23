@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0173cab331a0594b9278d51670cc646, type: 3}
   m_Name: Hikari_8_4
   m_EditorClassIdentifier: 
+  month: 7
+  type: 0
   id: 0
   sprite: {fileID: 21300000, guid: 1ac73d4a957df41418250cc78e524be0, type: 3}
+  specificity: 3

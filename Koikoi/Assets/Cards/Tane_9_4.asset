@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0173cab331a0594b9278d51670cc646, type: 3}
   m_Name: Tane_9_4
   m_EditorClassIdentifier: 
+  month: 8
+  type: 1
   id: 0
   sprite: {fileID: 21300000, guid: 6e711a10a3936214d987756d49b9811b, type: 3}
+  specificity: 5

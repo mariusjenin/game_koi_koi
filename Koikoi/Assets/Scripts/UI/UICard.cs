@@ -16,10 +16,10 @@ public class UICard : MonoBehaviour
         else if(hand is AI) Destroy(gameObject.GetComponent<Button>());
         image = GetComponent<Image>();
     }
-    public void Init(CardZone cz, Card card)
+    public void Init(CardZone cz, Card c)
     {
         this.hand = cz;
-        this.card = card;
+        this.card = c;
     }
 
     public void Display()

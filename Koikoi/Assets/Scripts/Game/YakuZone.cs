@@ -1,16 +1,45 @@
+using System.Collections.Generic;
+
 namespace Game
 {
     public class ZoneYakus : CardZone
     {
-        public int EvaluateScore()
+        public List<Yaku> yakus;
+        public int nbLight;
+        public int nbTane;
+        public int nbTan;
+        public int nbKasu;
+        public enum Yaku
         {
-            int score = 0;
+            //Lights
+            Goko,
+            Shiko,
+            AmeShiko,
+            Sanko,
+            //Sake
+            HanamiSake,
+            TsukimiSake,
+            //Tane
+            Inoshikacho,
+            Tane,
+            //Tan
+            AotanAkatanNoChofuku,
+            Aotan,
+            Akatan,
+            Tanzaku,
+            //Kasu
+            Kasu,
+            
+        }
+        public void UpdateYakus()
+        {
+            yakus.Clear();
             
             //NB TYPE
-            int nbLight = 0;
-            int nbTane = 0;
-            int nbTan = 0;
-            int nbKasu = 0;
+            nbLight = 0;
+            nbTane = 0;
+            nbTan = 0;
+            nbKasu = 0;
             
             //SPECIFIC CARDS
             bool hasFlowerLight = false;
@@ -47,27 +76,80 @@ namespace Game
             nbTan = nbRedTan + nbBlueTan + nbWrittenTan;
 
             //HIKARI YAKUS
-            if (nbLight == 5) score += 10;
-            else if (nbLight == 4) score += hasRainyLight ? 7 : 8;
-            else if (nbLight == 3 && !hasRainyLight) score += 5;
+            if (nbLight == 5) yakus.Add(Yaku.Goko);
+            else if (nbLight == 4)
+            {
+                if (hasRainyLight) yakus.Add(Yaku.AmeShiko);
+                else yakus.Add(Yaku.Shiko);
+            }
+            else if (nbLight == 3 && !hasRainyLight)yakus.Add(Yaku.Sanko);
             
             //ZAKE YAKUS
-            if (hasSakeTane && hasFlowerLight) score += 5;
-            if (hasSakeTane && hasMoonLight) score += 5;
+            if (hasSakeTane && hasFlowerLight)yakus.Add(Yaku.HanamiSake);
+            if (hasSakeTane && hasMoonLight) yakus.Add(Yaku.TsukimiSake);
             
             //TANE YAKUS
-            if (hasBoarTane && hasButterflyTane && hasDeerTane) score += 5 - (nbTane - 3);
-            if (nbTane >=5) score += 5 - (nbTane - 5);
+            if (hasBoarTane && hasButterflyTane && hasDeerTane) yakus.Add(Yaku.Inoshikacho);
+            if (nbTane >=5) yakus.Add(Yaku.Tane);
             
             //TAN YAKUS
-            if (nbBlueTan == 3 && nbWrittenTan == 3) score += 10;
-            else if (nbBlueTan == 3) score += 5 + (nbTan-3);
-            else if (nbWrittenTan == 3)score += 5 + (nbTan-3);
-            if (nbTan >= 5) score += 1 + (nbTan - 5);
+            if (nbBlueTan == 3 && nbWrittenTan == 3)yakus.Add(Yaku.AotanAkatanNoChofuku);
+            else if (nbBlueTan == 3)yakus.Add(Yaku.Aotan);
+            else if (nbWrittenTan == 3)yakus.Add(Yaku.Akatan);
+            if (nbTan >= 5) yakus.Add(Yaku.Tanzaku);
             
             //KASU YAKU
-            if (nbKasu >= 10) score += 1 + (nbKasu - 1);
-            
+            if (nbKasu >= 10) yakus.Add(Yaku.Kasu);
+        }
+        
+        public int EvaluateScore()
+        {
+            UpdateYakus();
+            int score = 0;
+
+            for (int i = 0; i <  yakus.Count; i++)
+            {
+                switch (yakus[i])
+                {
+                    case Yaku.Goko:
+                        score += 10;
+                        break;
+                    case Yaku.Shiko:
+                        score += 8;
+                        break;
+                    case Yaku.AmeShiko:
+                        score += 7;
+                        break;
+                    case Yaku.Sanko:
+                        score += 5;
+                        break;
+                    case Yaku.HanamiSake:
+                        score += 5;
+                        break;
+                    case Yaku.TsukimiSake:
+                        score += 5;
+                        break;
+                    case Yaku.Inoshikacho:
+                        score += 5 - (nbTane - 3);
+                        break;
+                    case Yaku.Tane:
+                        score += 5 - (nbTane - 5);
+                        break;
+                    case Yaku.AotanAkatanNoChofuku:
+                        score += 10;
+                        break;
+                    case Yaku.Aotan:
+                    case Yaku.Akatan:
+                        score += 5 + (nbTan-3);
+                        break;
+                    case Yaku.Tanzaku:
+                        score += 1 + (nbTan - 5);
+                        break;
+                    case Yaku.Kasu:
+                        score += 1 + (nbKasu - 1);
+                        break;
+                }
+            }
             return score;
         }
     }
