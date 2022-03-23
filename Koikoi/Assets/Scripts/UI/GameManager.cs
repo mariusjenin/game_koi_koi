@@ -61,12 +61,24 @@ public class GameManager : MonoBehaviour
 
     IEnumerator InitGame()
     {
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < 2; i++)
         {
-            yield return StartCoroutine(NewCard(player));
-            yield return StartCoroutine(NewCard(ai));
-            yield return StartCoroutine(NewCard(board));
+            for (int j = 0; j < 4; j++)
+            {
+                yield return StartCoroutine(NewCard(ai));
+            }
+
+            for (int j = 0; j < 4; j++)
+            {
+                yield return StartCoroutine(NewCard(player));
+            }
+
+            for (int j = 0; j < 4; j++)
+            {
+                yield return StartCoroutine(NewCard(board));
+            }
         }
+
         NextTurn();
         player.CanPlay = true;
     }
