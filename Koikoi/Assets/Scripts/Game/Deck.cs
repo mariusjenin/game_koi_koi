@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class Deck : CardZone
 {
-    public List<Card> Cards;
-
     public Card Draw()
     {
         int random = Random.Range(0,Cards.Count);

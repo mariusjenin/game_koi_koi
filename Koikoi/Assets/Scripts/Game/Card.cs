@@ -52,5 +52,15 @@ public class Card : ScriptableObject
     public int id;
     public Sprite sprite;
     public Specificity specificity;
+    private UICard ui;
+
+    public void SetUICard(UICard ui)
+    {
+        this.ui = ui;
+    }
+    public UICard GetUI()
+    {
+        return ui;
+    }
 
 }

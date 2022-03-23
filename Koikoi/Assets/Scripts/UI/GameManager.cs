@@ -32,12 +32,12 @@ public class GameManager : MonoBehaviour
     public GameObject PlayerGrid;
     public GameObject AIGrid;
     public GameObject BoardGrid;
+    public Image BlackOverlay;
 
     public Deck deck;
     public Player player;
     public AI ai;
     public Board board;
-    public Card debugCard;
 
     private void Awake()
     {
@@ -68,6 +68,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator InitGame()
     {
+        player.CanPlay(false);
         for (int i = 0; i < 2; i++)
         {
             for (int j = 0; j < 4; j++)
@@ -87,7 +88,7 @@ public class GameManager : MonoBehaviour
         }
 
         NextTurn();
-        player.CanPlay = true;
+        player.CanPlay(true);
     }
 
     // Fonction incr�mentant le tour et renvoyant la valeur du nouveau tour 
@@ -116,27 +117,28 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(0.02f);
 
         // Cr�ation d'un template image � la position du deck
-        GameObject image = Instantiate(template, Deck.transform.position, Deck.transform.rotation); // Utiliser card.image et faire animation
-        image.transform.SetParent(Deck.transform.parent.transform);
+        GameObject gObject = Instantiate(template, Deck.transform.position, Deck.transform.rotation, Deck.transform.parent.transform);
+
         Card card = deck.Draw();
-        image.GetComponent<UICard>().Init(cz, card);
+        UICard uiCard = gObject.GetComponentInChildren<UICard>();
+
+        card.SetUICard(uiCard);
+        uiCard.Init(cz, card, gObject.GetComponent<Canvas>());
         
 
         // Animation
         if(cz is Player)
-            yield return StartCoroutine(AddCardCouroutine(image.transform, PlayerGrid.transform)); // D�placement vers Player
+            yield return StartCoroutine(AddCardCouroutine(gObject.transform, PlayerGrid.transform)); // D�placement vers Player
         else if(cz is AI)
-            yield return StartCoroutine(AddCardCouroutine(image.transform, AIGrid.transform)); // D�placement vers AI
+            yield return StartCoroutine(AddCardCouroutine(gObject.transform, AIGrid.transform)); // D�placement vers AI
         else if (cz is Board)
-            yield return StartCoroutine(AddCardCouroutine(image.transform, BoardGrid.transform)); // D�placement vers Board
-        image.GetComponent<UICard>().Display();
+            yield return StartCoroutine(AddCardCouroutine(gObject.transform, BoardGrid.transform)); // D�placement vers Board
+        uiCard.Display();
         cz.AddCard(card);
     }
 
-    private IEnumerator AddCardCouroutine(Transform initial, Transform destination)
+    public IEnumerator AddCardCouroutine(Transform initial, Transform destination)
     {
-        Debug.Log(Vector3.Distance(initial.position, destination.position));
-
         while (Vector3.Distance(initial.position, destination.position) > 0.1f)
         {
             initial.position = Vector3.MoveTowards(initial.position, destination.position, speed / 0.4f);
@@ -144,6 +146,42 @@ public class GameManager : MonoBehaviour
         }
         initial.SetParent(destination);
 
+    }
+
+    public void FadeInGame()
+    {
+        StartCoroutine(Fade(BlackOverlay, BlackOverlay.color.a, 0.5f, 0.2f));
+    }
+
+    public void FadeOutGame()
+    {
+        StartCoroutine(Fade(BlackOverlay, BlackOverlay.color.a, 0f, 0.2f));
+    }
+
+    private IEnumerator Fade(Image img, float start, float end, float duration)
+    {
+        float timer = 0f;
+        AnimationCurve smoothCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0f, 0f), new Keyframe(1f, 1f) });
+
+        while (timer <= duration)
+        {
+            timer += Time.deltaTime;
+            Color c = img.color;
+            img.color = new Color(c.r, c.g, c.b, Mathf.Lerp(start, end, smoothCurve.Evaluate(timer / duration)));
+            yield return new WaitForSeconds(0.01f);
+        }
+    }
+
+    public void DesactivateButtons()
+    {
+        player.DesactivateButtons();
+        board.DesactivateButtons();
+    }
+
+    public void ActivateButtons()
+    {
+        player.ActivateButtons();
+        board.ActivateButtons();
     }
 
 }
