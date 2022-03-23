@@ -5,5 +5,5 @@ using UnityEngine;
 
 public class Board : CardZone
 {
-
+    
 }

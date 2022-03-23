@@ -6,30 +6,42 @@ using UnityEngine.UI;
 
 public class UICard : MonoBehaviour
 {
-    private CardZone hand;
+    private CardZone cardZone;
     private Card card;
     private Image image;
 
     private void Start()
     {
-        if (hand is Player) GetComponent<Button>().onClick.AddListener(OnClick);
-        else if(hand is AI) Destroy(gameObject.GetComponent<Button>());
+        if (cardZone is Player) GetComponent<Button>().onClick.AddListener(OnClickPlayer);
+        else if (cardZone is Board) GetComponent<Button>().onClick.AddListener(OnClickBoard);
+        else if(cardZone is AI) Destroy(gameObject.GetComponent<Button>());
         image = GetComponent<Image>();
     }
     public void Init(CardZone cz, Card c)
     {
-        this.hand = cz;
+        this.cardZone = cz;
         this.card = c;
     }
 
     public void Display()
     {
-        if (hand is Player || hand is Board) 
+        if (cardZone is Player || cardZone is Board) 
             image.sprite = card.sprite;
     }
 
-    void OnClick()
+    void OnClickPlayer()
     {
-        ((Player)hand).SelectCard(card);
+        Button bt = GetComponent<Button>();
+        // GetComponent<Image>().color = bt.colors.pressedColor;
+        ((Player)cardZone).SelectCard(card);
+        
+    }
+    void OnClickBoard()
+    {
+        Button bt = GetComponent<Button>();
+        // bt.interactable = false;
+        GetComponent<Image>().color = bt.colors.pressedColor;
+        ((Player)cardZone).SelectCard(card);
+        
     }
 }

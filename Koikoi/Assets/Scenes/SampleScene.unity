@@ -1177,6 +1177,50 @@ PrefabInstance:
       propertyPath: m_Name
       value: CardTemplate
       objectReference: {fileID: 0}
+    - target: {fileID: 8321246790894462710, guid: e8837852f0dac4e4ba014d7ec91ba415, type: 3}
+      propertyPath: m_Colors.m_PressedColor.b
+      value: 0.27450982
+      objectReference: {fileID: 0}
+    - target: {fileID: 8321246790894462710, guid: e8837852f0dac4e4ba014d7ec91ba415, type: 3}
+      propertyPath: m_Colors.m_PressedColor.g
+      value: 0.27450982
+      objectReference: {fileID: 0}
+    - target: {fileID: 8321246790894462710, guid: e8837852f0dac4e4ba014d7ec91ba415, type: 3}
+      propertyPath: m_Colors.m_PressedColor.r
+      value: 0.27450982
+      objectReference: {fileID: 0}
+    - target: {fileID: 8321246790894462710, guid: e8837852f0dac4e4ba014d7ec91ba415, type: 3}
+      propertyPath: m_Colors.m_ColorMultiplier
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8321246790894462710, guid: e8837852f0dac4e4ba014d7ec91ba415, type: 3}
+      propertyPath: m_Colors.m_DisabledColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8321246790894462710, guid: e8837852f0dac4e4ba014d7ec91ba415, type: 3}
+      propertyPath: m_Colors.m_DisabledColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8321246790894462710, guid: e8837852f0dac4e4ba014d7ec91ba415, type: 3}
+      propertyPath: m_Colors.m_DisabledColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8321246790894462710, guid: e8837852f0dac4e4ba014d7ec91ba415, type: 3}
+      propertyPath: m_Colors.m_DisabledColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8321246790894462710, guid: e8837852f0dac4e4ba014d7ec91ba415, type: 3}
+      propertyPath: m_Colors.m_SelectedColor.b
+      value: 0.50980395
+      objectReference: {fileID: 0}
+    - target: {fileID: 8321246790894462710, guid: e8837852f0dac4e4ba014d7ec91ba415, type: 3}
+      propertyPath: m_Colors.m_SelectedColor.g
+      value: 0.50980395
+      objectReference: {fileID: 0}
+    - target: {fileID: 8321246790894462710, guid: e8837852f0dac4e4ba014d7ec91ba415, type: 3}
+      propertyPath: m_Colors.m_SelectedColor.r
+      value: 0.50980395
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e8837852f0dac4e4ba014d7ec91ba415, type: 3}
 --- !u!224 &1664155311 stripped

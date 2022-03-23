@@ -8,6 +8,13 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public enum GameState
+    {
+        PlayerChooseCardHand,
+        PlayerChooseCardBoard1,
+        PlayerChooseCardBoard2
+        
+    }
     // Singleton
     public static GameManager instance;
 
