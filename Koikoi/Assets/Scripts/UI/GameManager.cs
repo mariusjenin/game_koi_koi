@@ -126,7 +126,9 @@ public class GameManager : MonoBehaviour
             yield return StartCoroutine(AddCardCouroutine(gObject.transform, AIGrid.transform)); // D�placement vers AI
         else if (cz is Board)
             yield return StartCoroutine(AddCardCouroutine(gObject.transform, BoardGrid.transform)); // D�placement vers Board
-        uiCard.Display();
+
+        if (cz is Player || cz is Board)
+            uiCard.Display();
         cz.AddCard(card);
     }
 

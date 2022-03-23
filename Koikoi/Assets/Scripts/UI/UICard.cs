@@ -31,8 +31,7 @@ public class UICard : MonoBehaviour
 
     public void Display()
     {
-        if (cardZone is Player || cardZone is Board) 
-            image.sprite = card.sprite;
+        image.sprite = card.sprite;
     }
 
     void OnClickPlayer()

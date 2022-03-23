@@ -4,15 +4,42 @@ using UnityEngine;
 
 public class AI : Hand
 {
+    public Board board;
     public override void CanPlay(bool canPlay)
     {
         base.CanPlay(canPlay);
-        Play();
+        if(canPlay) Play();
     }
-
     public void Play()
     {
-        Debug.Log("L'IA joue !");
-        // TODO
+        if(canPlay)
+        {
+            Debug.Log("L'IA joue !");
+            // TODO
+
+            Card boardCard = board.Cards[0];
+            Card aiCard = Cards[0];
+
+            PlayCards(boardCard, aiCard);
+
+
+            // Au tour du joueur de jouer
+            CanPlay(false);
+            GameManager.instance.player.CanPlay(true);
+        }
+    }
+
+    private void PlayCards(Card boardCard, Card aiCard)
+    {
+        aiCard.GetUI().Display();
+
+        // Anime les deux cartes vers la bonne zone Yakus
+        AddCardToYakus(boardCard);
+        AddCardToYakus(aiCard);
+
+        // Supprime les cartes de la main et du board
+        board.RemoveCard(boardCard);
+        RemoveCard(aiCard);
+
     }
 }

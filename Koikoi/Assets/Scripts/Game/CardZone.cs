@@ -7,8 +7,7 @@ namespace Game
     public class CardZone: MonoBehaviour
     {
 
-        [SerializeField]
-        protected List<Card> Cards = new List<Card>();
+        public List<Card> Cards = new List<Card>();
         
         public void AddCard(Card card)
         {
