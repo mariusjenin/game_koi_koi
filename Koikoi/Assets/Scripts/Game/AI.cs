@@ -201,7 +201,6 @@ public class AI : Hand
         {
             List<Action> acts = GetActions(player);
             
-            Debug.Log(depth+" " +acts.Count);
             if (depth <= 0 || acts.Count <= 0)
             {
                 MinimaxResult mmrTerminal = new MinimaxResult();
@@ -243,10 +242,9 @@ public class AI : Hand
     {
         if(canPlay)
         {
-            Debug.Log("L'IA joue !");
-            if(canKoikoi) // Se met ‡ jour tout seul dans GameManager.EndTurn
+            if(canKoikoi) // Se met ÔøΩ jour tout seul dans GameManager.EndTurn
             {
-                // DÈcision du koikoi
+                // DÔøΩcision du koikoi
                 // OUI : GameManager.instance.PopUpKoiKoi(KoiKoiPopUp.Type.KOIKOI);
                 // NON : GameManager.instance.PopUpKoiKoi(KoiKoiPopUp.Type.END);
             }
@@ -258,7 +256,7 @@ public class AI : Hand
             gsai.aiYakusCards = new List<Card>(this.yakus.Cards);
             gsai.playerYaskusCards = new List<Card>(GameManager.instance.player.yakus.Cards);
             gsai.boardCards = new List<Card>(board.Cards);
-            AI.GameStateAI.Action act = gsai.Minimax(false, 2).act;
+            AI.GameStateAI.Action act = gsai.Minimax(false, 1).act;
 
             ExecuteAction(act);
 
@@ -274,7 +272,6 @@ public class AI : Hand
         act.actPart1.card1.GetUI().Display();
         if (act.actPart1.pairDone)
         {
-            Debug.Log("actPart 1 pair");
             // Anime les deux cartes vers la bonne zone Yakus
             AddCardToYakus(act.actPart1.card2);
             AddCardToYakus(act.actPart1.card1);
@@ -282,17 +279,20 @@ public class AI : Hand
             board.RemoveCard(act.actPart1.card2);
         }
         else
-        { 
-            Debug.Log("actPart 1 alone");
+        {
             AddCardToBoard(act.actPart1.card1);
         }
         RemoveCard(act.actPart1.card1);
         
         //PART 2
-        act.actPart2.card1.GetUI().Display(); //TODO voir pourquoi cela provoque une erreur
+        // Cr√©ation d'un template image √† la position du deck
+        GameObject gObject = Instantiate(GameManager.instance.template, GameManager.instance.deck.transform.position, GameManager.instance.deck.transform.rotation, GameManager.instance.deck.transform.parent.transform);
+        UICard uiCard = gObject.GetComponentInChildren<UICard>();
+        act.actPart2.card1.SetUICard(uiCard);
+        uiCard.Init(this, act.actPart2.card1, gObject.GetComponent<Canvas>());
+        act.actPart2.card1.GetUI().Display();
         if (act.actPart2.pairDone)
         {
-            Debug.Log("actPart 2 pair");
             // Anime les deux cartes vers la bonne zone Yakus
             AddCardToYakus(act.actPart2.card2);
             AddCardToYakus(act.actPart2.card1);
@@ -300,8 +300,7 @@ public class AI : Hand
             board.RemoveCard(act.actPart2.card2);
         }
         else
-        { 
-            Debug.Log("actPart 1 alone");
+        {
             AddCardToBoard(act.actPart2.card1);
         }
         GameManager.instance.deck.RemoveCard(act.actPart2.card1);
