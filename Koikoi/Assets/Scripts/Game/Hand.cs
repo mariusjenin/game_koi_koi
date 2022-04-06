@@ -37,5 +37,13 @@ public class Hand : CardZone
                 break;
         }
     }
+    
+    public void AddCardToBoard(Card card)
+    {
+        Destroy(card.GetUI().GetComponent<Button>());
+        GameManager.instance.board.AddCard(card);
+
+        StartCoroutine(GameManager.instance.AddCardCouroutine(card.GetUI().transform, GameManager.instance.BoardGrid.transform));
+    }
 
 }

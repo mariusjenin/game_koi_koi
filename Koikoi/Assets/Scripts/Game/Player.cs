@@ -13,20 +13,20 @@ public class Player :  Hand
     {
         if(canPlay)
         {
-            // Le Joueur n'avait pas de carte sélectionné
+            // Le Joueur n'avait pas de carte sÃ©lectionnÃ©
             if(selectedCard == null)
             {
                 GameManager.instance.FadeInGame();
                 selectedCard = card;
                 Board.DisplayAssociableCards(selectedCard);
             }
-            // Le Joueur retire la sélection de sa carte
+            // Le Joueur retire la sÃ©lection de sa carte
             else if (card.Equals(selectedCard))
             {
                 GameManager.instance.FadeOutGame();
                 selectedCard = null;
             }
-            // Le Joueur sélectionne une autre carte
+            // Le Joueur sÃ©lectionne une autre carte
             else
             {
                 selectedCard = card;
