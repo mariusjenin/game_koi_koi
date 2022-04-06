@@ -33,9 +33,12 @@ public class GameManager : MonoBehaviour
     public AI ai;
     public Board board;
 
+    private List<Card> gameCards;
+
     private void Awake()
     {
         instance = this;
+        gameCards = new List<Card>(deck.Cards);
     }
 
     private void Start()
@@ -45,22 +48,29 @@ public class GameManager : MonoBehaviour
         StartCoroutine(InitGame());
     }
 
-    void ClearGame()
+    private void ClearGame()
     {
         // Clear Player hand
         for (var i = PlayerGrid.transform.childCount - 1; i >= 0; i--)
             Destroy(PlayerGrid.transform.GetChild(i).gameObject);
+        player.Cards.Clear();
 
         // Clear AI hand
         for (var i = AIGrid.transform.childCount - 1; i >= 0; i--)
             Destroy(AIGrid.transform.GetChild(i).gameObject);
+        ai.Cards.Clear();
 
         // Clear Board
         for (var i = BoardGrid.transform.childCount - 1; i >= 0; i--)
             Destroy(BoardGrid.transform.GetChild(i).gameObject);
+        board.Cards.Clear();
+
+        // Reset deck cards
+        deck.Cards = new List<Card>(gameCards);
+
     }
 
-    IEnumerator InitGame()
+    private IEnumerator InitGame()
     {
         player.CanPlay(false);
         for (int i = 0; i < 2; i++)
@@ -81,24 +91,31 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        NextTurn();
+        IncreaseTurn();
         player.CanPlay(true);
     }
 
-    public void EndTurn(Hand hand)
+    public void NextTurn()
+    {
+        ClearGame();
+        StartCoroutine(InitGame());
+    }
+
+    public void HandFinishTurn(Hand hand)
     {
         if(hand.hasYakus())
         {
-            Debug.Log(hand.name + " has a yaku");
-            Debug.Log(hand.yakus.score.yakus[0]);
-            if(hand is Player) PopUpKoiKoi();
+            if (hand is Player) PopUpKoiKoi(KoiKoiPopUp.Type.PLAYER);
+            else if (hand is AI) ((AI)hand).canKoikoi = true;
         }
         hand.CanPlay(false);
         if (hand is Player) ai.CanPlay(true);
         else player.CanPlay(true);
     }
+
+
     // Fonction incr�mentant le tour et renvoyant la valeur du nouveau tour 
-    int NextTurn()
+    private int IncreaseTurn()
     {
         int CurrentTurn = Int32.Parse(Turn.text); 
 
@@ -112,10 +129,10 @@ public class GameManager : MonoBehaviour
     }
 
     // Fonction mettant � jour le score du joueur ou de l'IA
-    void UpdateScore(bool player, int score)
+    void UpdateScore()
     {
-        if (player) PlayerScore.SetText("" + score);
-        else AIScore.SetText("" + score);
+        PlayerScore.SetText("" + player.yakus.score.EvaluateScore());
+        AIScore.SetText("" + ai.yakus.score.EvaluateScore());
     }
 
     private IEnumerator NewCard(CardZone cz)
@@ -180,10 +197,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void PopUpKoiKoi()
+    public void PopUpKoiKoi(KoiKoiPopUp.Type type)
     {
         FadeInGame();
-        koikoiPopUp.Display();
+        DesactivateButtons();
+        koikoiPopUp.Show(type);
     }
 
     public void DesactivateButtons()
