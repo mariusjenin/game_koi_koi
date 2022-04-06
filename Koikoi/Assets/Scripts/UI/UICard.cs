@@ -83,13 +83,13 @@ public class UICard : MonoBehaviour
 
     void OnClickPlayer()
     {
-        Debug.Log("Player");
+        // Debug.Log("Player");
         ((Player)cardZone).SelectCard(card);
         
     }
     void OnClickBoard()
     {
-        Debug.Log("Board");
+        // Debug.Log("Board");
         Player player = GameManager.instance.player;
         AI ai = GameManager.instance.ai;
         Deck deck = GameManager.instance.deck;
@@ -100,7 +100,7 @@ public class UICard : MonoBehaviour
             // Ajout des 2 cartes au Yakus du joueur
             ((Board)cardZone).AddCardsToYakus(card, deck.topCard, player);
 
-            // Réinitialisation 
+            // Rï¿½initialisation 
             deck.topCard = null;
             GameManager.instance.FadeOutGame();
 
@@ -114,7 +114,7 @@ public class UICard : MonoBehaviour
             // Ajout des 2 cartes au Yakus du joueur
             ((Board)cardZone).AddCardsToYakus(card, player.selectedCard, player);
 
-            // Réinitialisation 
+            // Rï¿½initialisation 
             player.selectedCard = null;
             ((Board)cardZone).Cards.ForEach(c => c.GetUI().Hide());
 
@@ -126,11 +126,11 @@ public class UICard : MonoBehaviour
 
     void OnClickDeck()
     {
-        Debug.Log("Deck");
+        // Debug.Log("Deck");
         // Ajout de la carte au board
         GameManager.instance.player.AddCardToBoard(((Deck)cardZone).topCard);
 
-        // Réinitialisation 
+        // Rï¿½initialisation 
         GameManager.instance.deck.topCard = null;
         GameManager.instance.FadeOutGame();
 

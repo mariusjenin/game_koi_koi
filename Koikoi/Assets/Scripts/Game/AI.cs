@@ -13,28 +13,35 @@ public class AI : Hand
 
     struct GameStateAI
     {
+
         public struct Action
         {
             public bool playerTarget;
+            public ActionPart actPart1;
+            public ActionPart actPart2;
+        }
+        
+        public struct ActionPart
+        {
             public bool pairDone;
-            public Card handCard;
-            public Card boardCard;
+            public Card card1;
+            public Card card2;
         }
         
         //HAND
         public List<Card> aiCards;
         public List<Card> boardCards;
+        public List<Card> playerAndDeckCards;
         public List<Card> deckCards;
-        public List<Card> playerCards;
         public List<Card> aiYakusCards;
         public List<Card> playerYaskusCards;
 
         public GameStateAI(GameStateAI previous)
         {
-            playerCards = previous.playerCards;
+            playerAndDeckCards = previous.playerAndDeckCards;
+            deckCards = previous.deckCards;
             aiCards = previous.aiCards;
             boardCards = previous.boardCards;
-            deckCards = previous.deckCards;
             aiYakusCards = previous.aiYakusCards;
             playerYaskusCards = previous.playerYaskusCards;
         }
@@ -52,71 +59,133 @@ public class AI : Hand
         public void ApplyAction(Action act)
         {
             
+            //Part 1
             if (!act.playerTarget)
             {
-                aiCards.Remove(act.handCard);
+                aiCards.Remove(act.actPart1.card1);
             }
-            if (act.pairDone)
+            else
+            {
+                playerAndDeckCards.Remove(act.actPart1.card1);
+            }
+            if (act.actPart1.pairDone)
             {
                 if (act.playerTarget)
                 {
-                    playerYaskusCards.Add(act.handCard);
-                    playerYaskusCards.Add(act.boardCard);
+                    playerYaskusCards.Add(act.actPart1.card1);
+                    playerYaskusCards.Add(act.actPart1.card2);
                 }
                 else
                 {
-                    aiYakusCards.Add(act.handCard);
-                    aiYakusCards.Add(act.boardCard);
+                    aiYakusCards.Add(act.actPart1.card1);
+                    aiYakusCards.Add(act.actPart1.card2);
                 }
-                boardCards.Remove(act.boardCard);
+                boardCards.Remove(act.actPart1.card2);
             }
             else
-            { 
-                boardCards.Add(act.handCard);
+            {
+                boardCards.Add(act.actPart1.card1);
+            }
+            
+            //Part 2
+            playerAndDeckCards.Remove(act.actPart2.card1);
+            if (act.actPart2.pairDone)
+            {
+                if (act.playerTarget)
+                {
+                    playerYaskusCards.Add(act.actPart2.card1);
+                    playerYaskusCards.Add(act.actPart2.card2);
+                }
+                else
+                {
+                    aiYakusCards.Add(act.actPart2.card1);
+                    aiYakusCards.Add(act.actPart2.card2);
+                }
+                boardCards.Remove(act.actPart2.card2);
+            }
+            else
+            {
+                boardCards.Add(act.actPart2.card1);
             }
         }
         
         public  List<Action> GetActions(bool player) //false : IA | true : player
         {
-            List<Card> hand;
-            if (player)
-            {
-                hand = playerCards.Concat(deckCards).ToList();
-            }
-            else
-            {
-                hand = aiCards;
-            }
+            List<Card> handPart1 = player?playerAndDeckCards:aiCards;
+            List<Card> handPart2 = player?playerAndDeckCards:deckCards;
 
             List<Action> actions = new List<Action>();
-            for (int i = 0; i < hand.Count; i++)
+            List<ActionPart> actionParts1 = new List<ActionPart>();
+            List<ActionPart> actionParts2 = new List<ActionPart>();
+            
+            //Part 1
+            for (int i = 0; i < handPart1.Count; i++)
             {
                 bool found = false;
                 for (int j = 0; j < boardCards.Count; j++)
                 {
-                    if (hand[i].month == boardCards[j].month)
+                    if (handPart1[i].month == boardCards[j].month)
                     {
                         
-                        Action act = new Action();
-                        act.pairDone = true;
-                        act.handCard = hand[i];
-                        act.boardCard = boardCards[j];
-                        act.playerTarget = player;
-                        actions.Add(act);
+                        ActionPart actPart1 = new ActionPart();
+                        actPart1.pairDone = true;
+                        actPart1.card1 = handPart1[i];
+                        actPart1.card2 = boardCards[j];
+                        actionParts1.Add(actPart1);
                         found = true;
                     }
                 }
 
                 if (!found)
                 {
-                    Action act = new Action();
-                    act.pairDone = false;
-                    act.handCard = hand[i];
-                    act.playerTarget = player;
-                    actions.Add(act);
+                    ActionPart actPart1 = new ActionPart();
+                    actPart1.pairDone = false;
+                    actPart1.card1 = handPart1[i];
+                    actionParts1.Add(actPart1);
+                }
+            }
+            
+            //Part 2
+            for (int i = 0; i < handPart2.Count; i++)
+            {
+                bool found = false;
+                for (int j = 0; j < boardCards.Count; j++)
+                {
+                    if (handPart2[i].month == boardCards[j].month)
+                    {
+                        
+                        ActionPart actPart2 = new ActionPart();
+                        actPart2.pairDone = true;
+                        actPart2.card1 = handPart2[i];
+                        actPart2.card2 = boardCards[j];
+                        actionParts2.Add(actPart2);
+                        found = true;
+                    }
+                }
+
+                if (!found)
+                {
+                    ActionPart actPart2 = new ActionPart();
+                    actPart2.pairDone = false;
+                    actPart2.card1 = handPart2[i];
+                    actionParts2.Add(actPart2);
                 }
             }
 
+            //Combining the both part TODO à revoir car cette fâçon n'explore pas toutes les possibilités
+            for (int i = 0; i < actionParts1.Count; i++)
+            {
+                for (int j = 0; j < actionParts2.Count; j++)
+                {
+                    if (actionParts1[i].card1 != actionParts2[j].card1 && actionParts1[i].card2 != actionParts2[j].card2)
+                    {
+                        Action act = new Action();
+                        act.actPart1 = actionParts1[i];
+                        act.actPart2 = actionParts2[j];
+                        actions.Add(act);
+                    }
+                }
+            }
             return actions;
         }
 
@@ -128,14 +197,16 @@ public class AI : Hand
         }
         public MinimaxResult Minimax(bool player, int depth)
         {
-            if (depth <= 0)
+            List<Action> acts = GetActions(player);
+            
+            Debug.Log(depth+" " +acts.Count);
+            if (depth <= 0 || acts.Count <= 0)
             {
                 MinimaxResult mmrTerminal = new MinimaxResult();
                 mmrTerminal.score = Utility();
                 return mmrTerminal;
             }
 
-            List<Action> acts = GetActions(player);
 
             int score = player ? -2147483648 : 2147483647;
             MinimaxResult mmr = new MinimaxResult();
@@ -174,10 +245,10 @@ public class AI : Hand
 
             GameStateAI gsai = new GameStateAI();
             gsai.aiCards = new List<Card>(this.Cards);
-            gsai.playerCards = new List<Card>(GameManager.instance.player.Cards);
+            gsai.playerAndDeckCards = new List<Card>(GameManager.instance.player.Cards.Concat(deck.Cards).ToList());
+            gsai.deckCards = new List<Card>(deck.Cards);
             gsai.aiYakusCards = new List<Card>(this.yakus.Cards);
             gsai.playerYaskusCards = new List<Card>(GameManager.instance.player.yakus.Cards);
-            gsai.deckCards = new List<Card>(deck.Cards);
             gsai.boardCards = new List<Card>(board.Cards);
             AI.GameStateAI.Action act = gsai.Minimax(false, 2).act;
 
@@ -191,21 +262,41 @@ public class AI : Hand
     private void ExecuteAction(AI.GameStateAI.Action act)
     {
         
-        act.handCard.GetUI().Display();
-        
-        if (act.pairDone)
+        //PART 1
+        act.actPart1.card1.GetUI().Display();
+        if (act.actPart1.pairDone)
         {
+            Debug.Log("actPart 1 pair");
             // Anime les deux cartes vers la bonne zone Yakus
-            AddCardToYakus(act.boardCard);
-            AddCardToYakus(act.handCard);
+            AddCardToYakus(act.actPart1.card2);
+            AddCardToYakus(act.actPart1.card1);
             // Supprime les cartes de la main et du board
-            board.RemoveCard(act.boardCard);
+            board.RemoveCard(act.actPart1.card2);
         }
         else
         { 
-            AddCardToBoard(act.handCard);
+            Debug.Log("actPart 1 alone");
+            AddCardToBoard(act.actPart1.card1);
         }
-        RemoveCard(act.handCard);
+        RemoveCard(act.actPart1.card1);
+        
+        //PART 2
+        act.actPart2.card1.GetUI().Display(); //TODO voir pourquoi cela provoque une erreur
+        if (act.actPart2.pairDone)
+        {
+            Debug.Log("actPart 2 pair");
+            // Anime les deux cartes vers la bonne zone Yakus
+            AddCardToYakus(act.actPart2.card2);
+            AddCardToYakus(act.actPart2.card1);
+            // Supprime les cartes de la main et du board
+            board.RemoveCard(act.actPart2.card2);
+        }
+        else
+        { 
+            Debug.Log("actPart 1 alone");
+            AddCardToBoard(act.actPart2.card1);
+        }
+        GameManager.instance.deck.RemoveCard(act.actPart2.card1);
 
 
     }
