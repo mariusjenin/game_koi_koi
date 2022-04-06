@@ -105,7 +105,7 @@ public class UICard : MonoBehaviour
             GameManager.instance.FadeOutGame();
 
             // Au tour de l'IA de jouer
-            GameManager.instance.EndTurn(player);
+            GameManager.instance.HandFinishTurn(player);
         } 
         // Si le joueur effectue une association avec une carte de sa main
         else if(player.selectedCard != null)
@@ -135,7 +135,7 @@ public class UICard : MonoBehaviour
         GameManager.instance.FadeOutGame();
 
         // Au tour de l'IA de jouer
-        GameManager.instance.EndTurn(GameManager.instance.player);
+        GameManager.instance.HandFinishTurn(GameManager.instance.player);
     }
 
     public void Show()

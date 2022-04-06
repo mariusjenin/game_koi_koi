@@ -11,6 +11,8 @@ public class AI : Hand
     public Board board;
     public Player player;
 
+    public bool canKoikoi = false;
+
     struct GameStateAI
     {
 
@@ -242,6 +244,12 @@ public class AI : Hand
         if(canPlay)
         {
             Debug.Log("L'IA joue !");
+            if(canKoikoi) // Se met à jour tout seul dans GameManager.EndTurn
+            {
+                // Décision du koikoi
+                // OUI : GameManager.instance.PopUpKoiKoi(KoiKoiPopUp.Type.KOIKOI);
+                // NON : GameManager.instance.PopUpKoiKoi(KoiKoiPopUp.Type.END);
+            }
 
             GameStateAI gsai = new GameStateAI();
             gsai.aiCards = new List<Card>(this.Cards);
@@ -255,7 +263,7 @@ public class AI : Hand
             ExecuteAction(act);
 
             // Au tour du joueur de jouer
-            GameManager.instance.EndTurn(this);
+            GameManager.instance.HandFinishTurn(this);
         }
     }
 
