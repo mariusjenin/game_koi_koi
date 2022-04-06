@@ -8,12 +8,25 @@ public class Hand : CardZone
 {
     public Deck deck;
     public ZoneYakus yakus;
+    int lastYakusCount = 0;
 
     protected bool canPlay = false;
+    private void Awake()
+    {
+        yakus.score = new ScoreManager(yakus.Cards);
+    }
+
     public virtual void CanPlay(bool canPlay)
     {
         this.canPlay = canPlay;
     }
+
+    public bool hasYakus()
+    {
+        yakus.score.UpdateYakus();
+        return yakus.score.yakus.Count > lastYakusCount;
+    }
+
 
     public void AddCardToYakus(Card card)
     {
@@ -43,10 +56,12 @@ public class Hand : CardZone
         if (!card.GetUI().gameObject.GetComponent<Button>().enabled)
             card.GetUI().gameObject.GetComponent<Button>().enabled = true;
 
+        card.GetUI().SetCardZone(GameManager.instance.board);
+
         GameManager.instance.board.AddCard(card);
         RemoveCard(card);
 
-        StartCoroutine(GameManager.instance.AddCardCouroutine(card.GetUI().transform, GameManager.instance.BoardGrid.transform));
+        StartCoroutine(GameManager.instance.AddCardCouroutine(card.GetUI().canvas.gameObject.transform, GameManager.instance.BoardGrid.transform));
     }
 
 }

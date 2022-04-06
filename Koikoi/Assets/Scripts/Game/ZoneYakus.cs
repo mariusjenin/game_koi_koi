@@ -11,7 +11,6 @@ namespace Game
         public GameObject TanGrid;
         public GameObject KasuGrid;
 
-        
-      
+        public ScoreManager score;
     }
 }

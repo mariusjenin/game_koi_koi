@@ -26,6 +26,7 @@ public class Player :  Hand
             {
                 // Dépôt de la carte sélectionnée dans le board
                 AddCardToBoard(selectedCard);
+                RemoveCard(selectedCard);
 
                 // Réinitialisation 
                 selectedCard = null;

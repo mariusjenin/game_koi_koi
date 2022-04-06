@@ -182,10 +182,9 @@ public class AI : Hand
             AI.GameStateAI.Action act = gsai.Minimax(false, 2).act;
 
             ExecuteAction(act);
-            
+
             // Au tour du joueur de jouer
-            CanPlay(false);
-            GameManager.instance.player.CanPlay(true);
+            GameManager.instance.EndTurn(this);
         }
     }
 

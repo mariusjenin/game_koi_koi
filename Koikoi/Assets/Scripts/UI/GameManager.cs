@@ -84,6 +84,17 @@ public class GameManager : MonoBehaviour
         player.CanPlay(true);
     }
 
+    public void EndTurn(Hand hand)
+    {
+        if(hand.hasYakus())
+        {
+            Debug.Log(hand.name + " has a yaku");
+            Debug.Log(hand.yakus.score.yakus[0]);
+        }
+        hand.CanPlay(false);
+        if (hand is Player) ai.CanPlay(true);
+        else player.CanPlay(true);
+    }
     // Fonction incr�mentant le tour et renvoyant la valeur du nouveau tour 
     int NextTurn()
     {
