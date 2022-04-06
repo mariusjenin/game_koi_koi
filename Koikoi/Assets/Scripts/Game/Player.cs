@@ -18,18 +18,29 @@ public class Player :  Hand
             {
                 GameManager.instance.FadeInGame();
                 selectedCard = card;
+                selectedCard.GetUI().Show();
                 Board.DisplayAssociableCards(selectedCard);
             }
-            // Le Joueur retire la sélection de sa carte
+            // Le Joueur drop sa carte sélectionnée
             else if (card.Equals(selectedCard))
             {
-                GameManager.instance.FadeOutGame();
+                // Dépôt de la carte sélectionnée dans le board
+                AddCardToBoard(selectedCard);
+
+                // Réinitialisation 
                 selectedCard = null;
+                Board.Cards.ForEach(c => c.GetUI().Hide());
+
+                // Affichage de la carte sur le deck, et des cartes du joueur associables
+                deck.DisplayOnTop();
+                deck.DisplayTopCardAssociable();
             }
             // Le Joueur sélectionne une autre carte
             else
             {
+                selectedCard.GetUI().Hide();
                 selectedCard = card;
+                selectedCard.GetUI().Show();
                 Board.DisplayAssociableCards(selectedCard);
             }
         }
