@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     public GameObject AIGrid;
     public GameObject BoardGrid;
     public Image BlackOverlay;
+    [SerializeField] private KoiKoiPopUp koikoiPopUp;
 
     public Deck deck;
     public Player player;
@@ -90,6 +91,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log(hand.name + " has a yaku");
             Debug.Log(hand.yakus.score.yakus[0]);
+            if(hand is Player) PopUpKoiKoi();
         }
         hand.CanPlay(false);
         if (hand is Player) ai.CanPlay(true);
@@ -176,6 +178,12 @@ public class GameManager : MonoBehaviour
             img.color = new Color(c.r, c.g, c.b, Mathf.Lerp(start, end, smoothCurve.Evaluate(timer / duration)));
             yield return new WaitForSeconds(0.01f);
         }
+    }
+
+    public void PopUpKoiKoi()
+    {
+        FadeInGame();
+        koikoiPopUp.Display();
     }
 
     public void DesactivateButtons()
