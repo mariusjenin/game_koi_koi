@@ -2448,7 +2448,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74bf91961b134a04ba6b8973ed376ea4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Cards: []
   deck: {fileID: 1129414355}
+  yakus: {fileID: 0}
+  board: {fileID: 0}
 --- !u!1 &8685773497663584218
 GameObject:
   m_ObjectHideFlags: 0
@@ -3585,6 +3588,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efbd1faa5ac7bc8418c65dc420d35c9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Cards: []
 --- !u!1 &8685773498411656437
 GameObject:
   m_ObjectHideFlags: 0
@@ -4153,8 +4157,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b86e21c4692e6d48b00fc3ea661afa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Cards: []
   deck: {fileID: 1129414355}
-  CanPlay: 0
+  yakus: {fileID: 0}
+  Board: {fileID: 0}
+  selectedCard: {fileID: 0}
 --- !u!1 &8685773498855080465
 GameObject:
   m_ObjectHideFlags: 0
@@ -5124,11 +5131,11 @@ MonoBehaviour:
   PlayerGrid: {fileID: 8685773498751245707}
   AIGrid: {fileID: 8685773497655673043}
   BoardGrid: {fileID: 8685773498402410310}
+  BlackOverlay: {fileID: 0}
   deck: {fileID: 1129414355}
   player: {fileID: 1105741758}
   ai: {fileID: 1892856787}
   board: {fileID: 657458355}
-  debugCard: {fileID: 11400000, guid: 56ff945f56135f64fa146beab70ce302, type: 2}
 --- !u!1001 &3034310072918272578
 PrefabInstance:
   m_ObjectHideFlags: 0
