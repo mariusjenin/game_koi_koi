@@ -19,7 +19,7 @@ public class UICard : MonoBehaviour
             GetComponent<Button>().interactable = false;
             GetComponent<Button>().onClick.AddListener(OnClickBoard);
         }
-        else if (cardZone is AI) Destroy(gameObject.GetComponent<Button>());
+        else if (cardZone is AI) gameObject.GetComponent<Button>().enabled = false;
         image = GetComponent<Image>();
     }
     public void Init(CardZone cz, Card c, Canvas cvs)

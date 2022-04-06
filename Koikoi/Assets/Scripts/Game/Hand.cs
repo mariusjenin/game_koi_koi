@@ -40,8 +40,11 @@ public class Hand : CardZone
     
     public void AddCardToBoard(Card card)
     {
-        Destroy(card.GetUI().GetComponent<Button>());
+        if (!card.GetUI().gameObject.GetComponent<Button>().enabled)
+            card.GetUI().gameObject.GetComponent<Button>().enabled = true;
+
         GameManager.instance.board.AddCard(card);
+        RemoveCard(card);
 
         StartCoroutine(GameManager.instance.AddCardCouroutine(card.GetUI().transform, GameManager.instance.BoardGrid.transform));
     }

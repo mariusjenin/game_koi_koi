@@ -81,7 +81,7 @@ public class AI : Hand
             List<Card> hand;
             if (player)
             {
-                hand = playerCards.Concat(deckCards).ToList();;;
+                hand = playerCards.Concat(deckCards).ToList();
             }
             else
             {
@@ -155,7 +155,6 @@ public class AI : Hand
                 {
                     if (currMmr.score < mmr.score) mmr = currMmr;
                 }
-                Debug.Log(depth+" "+currMmr.score);
             }
             return mmr;
         }
@@ -174,12 +173,12 @@ public class AI : Hand
             Debug.Log("L'IA joue !");
 
             GameStateAI gsai = new GameStateAI();
-            gsai.aiCards = this.Cards;
-            gsai.playerCards = GameManager.instance.player.Cards;
-            gsai.aiYakusCards = this.yakus.Cards;
-            gsai.playerYaskusCards = GameManager.instance.player.yakus.Cards;
-            gsai.deckCards = deck.Cards;
-            gsai.boardCards = board.Cards;
+            gsai.aiCards = new List<Card>(this.Cards);
+            gsai.playerCards = new List<Card>(GameManager.instance.player.Cards);
+            gsai.aiYakusCards = new List<Card>(this.yakus.Cards);
+            gsai.playerYaskusCards = new List<Card>(GameManager.instance.player.yakus.Cards);
+            gsai.deckCards = new List<Card>(deck.Cards);
+            gsai.boardCards = new List<Card>(board.Cards);
             AI.GameStateAI.Action act = gsai.Minimax(false, 2).act;
 
             ExecuteAction(act);
