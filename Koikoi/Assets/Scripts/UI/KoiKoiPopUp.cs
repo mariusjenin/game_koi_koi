@@ -92,24 +92,33 @@ public class KoiKoiPopUp : MonoBehaviour
 
     public void onClickEndTurn()
     {
-        StartCoroutine(GameManager.instance.NextTurn(true));
+        StartCoroutine(onClickEndTurnCoroutine());
     }
 
     public void onClickKoiKoi()
     {
-        StartCoroutine(GameManager.instance.Koikoi(true));
+        StartCoroutine(onClickKoikoiCoroutine());
+    }
+
+    private IEnumerator onClickKoikoiCoroutine()
+    {
+        yield return StartCoroutine(Hide());
+        yield return StartCoroutine(GameManager.instance.Koikoi(true));
+    }
+    private IEnumerator onClickEndTurnCoroutine()
+    {
+        yield return StartCoroutine(Hide());
+        yield return StartCoroutine(GameManager.instance.NextTurn(true));
     }
 
     public IEnumerator KoikoiCoroutine(Hand hand)
     {
-        yield return StartCoroutine(Hide());
         yield return StartCoroutine(Show(Type.KOIKOI, hand));
         yield return StartCoroutine(HideAfterSeconds(0.5f));
     }
 
     public IEnumerator NextTurnCoroutine(Hand hand)
     {
-        yield return StartCoroutine(Hide());
         yield return StartCoroutine(Show(Type.END, hand));
         yield return StartCoroutine(HideAfterSeconds(0.5f));
     }
