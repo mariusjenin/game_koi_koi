@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour
 
         Hand hand = isPlayer ? player : ai;
 
-        yield return StartCoroutine(Fade(BlackOverlay, BlackOverlay.color.a, 0.5f, 0.2f));
+        yield return StartCoroutine(FadeInGame());
 
         yield return StartCoroutine(koikoiPopUp.NextTurnCoroutine(hand));
 
@@ -133,7 +133,6 @@ public class GameManager : MonoBehaviour
 
     public void HandFinishTurn(Hand hand)
     {
-        // if (hand is Player) StartCoroutine(PopUpKoiKoi(KoiKoiPopUp.Type.PLAYER));
         if (hand.hasYakus())
         {
             if (hand is Player) StartCoroutine(PopUpKoiKoi(KoiKoiPopUp.Type.PLAYER));
