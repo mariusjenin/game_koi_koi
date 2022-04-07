@@ -242,15 +242,6 @@ public class AI : Hand
     {
         if(canPlay)
         {
-            if(canKoikoi) // Se met � jour tout seul dans GameManager.EndTurn
-            {
-                // Affichage de la D�cision du koikoi
-                // Koikoi :
-                // StartCoroutine(GameManager.instance.Koikoi(false))
-                //
-                // Fin de tour :
-                // StartCoroutine(GameManager.instance.NextTurn(false));
-            }
 
             GameStateAI gsai = new GameStateAI();
             gsai.aiCards = new List<Card>(this.Cards);
@@ -259,12 +250,24 @@ public class AI : Hand
             gsai.aiYakusCards = new List<Card>(this.yakus.Cards);
             gsai.playerYaskusCards = new List<Card>(GameManager.instance.player.yakus.Cards);
             gsai.boardCards = new List<Card>(board.Cards);
-            AI.GameStateAI.Action act = gsai.Minimax(false, 1).act;
+            AI.GameStateAI.Action act = gsai.Minimax(false, 2).act;
 
             ExecuteAction(act);
 
             // Au tour du joueur de jouer
             GameManager.instance.HandFinishTurn(this);
+            
+            
+            if(canKoikoi) // Se met � jour tout seul dans GameManager.EndTurn
+            {
+                canKoikoi = false;
+                // Affichage de la Décision du koikoi
+                // Koikoi :
+                // StartCoroutine(GameManager.instance.Koikoi(false))
+                //
+                // Fin de tour :
+                StartCoroutine(GameManager.instance.NextTurn(false));
+            }
         }
     }
 
