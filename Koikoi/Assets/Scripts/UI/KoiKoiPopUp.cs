@@ -97,20 +97,21 @@ public class KoiKoiPopUp : MonoBehaviour
 
     public void onClickKoiKoi()
     {
-        // Set koikoi state to true
-        GameManager.instance.koikoi = true;
-        // Player'll need one more yaku to trigger the koikoi
-        GameManager.instance.player.lastYakusCount++;
-        StartCoroutine(KoikoiCoroutine());
+        StartCoroutine(GameManager.instance.Koikoi(true));
     }
 
-    private IEnumerator KoikoiCoroutine()
+    public IEnumerator KoikoiCoroutine(Hand hand)
     {
         yield return StartCoroutine(Hide());
-        yield return StartCoroutine(Show(Type.KOIKOI, GameManager.instance.player));
+        yield return StartCoroutine(Show(Type.KOIKOI, hand));
         yield return StartCoroutine(HideAfterSeconds(0.5f));
-        yield return StartCoroutine(GameManager.instance.FadeOutGame());
-        gameObject.SetActive(false);
+    }
+
+    public IEnumerator NextTurnCoroutine(Hand hand)
+    {
+        yield return StartCoroutine(Hide());
+        yield return StartCoroutine(Show(Type.END, hand));
+        yield return StartCoroutine(HideAfterSeconds(0.5f));
     }
 
     private IEnumerator Fade(float start, float end, float duration)

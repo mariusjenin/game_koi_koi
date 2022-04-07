@@ -245,8 +245,11 @@ public class AI : Hand
             if(canKoikoi) // Se met � jour tout seul dans GameManager.EndTurn
             {
                 // Affichage de la D�cision du koikoi
-                // OUI : GameManager.instance.PopUpKoiKoi(KoiKoiPopUp.Type.KOIKOI, this);
-                // NON : GameManager.instance.PopUpKoiKoi(KoiKoiPopUp.Type.End, this);
+                // Koikoi :
+                // StartCoroutine(GameManager.instance.Koikoi(false))
+                //
+                // Fin de tour :
+                // StartCoroutine(GameManager.instance.NextTurn(false));
             }
 
             GameStateAI gsai = new GameStateAI();
