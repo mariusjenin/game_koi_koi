@@ -17,9 +17,7 @@ namespace Game
         public int getScore()
         {
             this.score.SetCards(Cards);
-            int s = score.EvaluateScore();
-            Debug.Log(s);
-            return s;
+            return score.EvaluateScore();;
         }
     }
 }
