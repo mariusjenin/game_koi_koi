@@ -43,8 +43,6 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        ClearGame();
-        // Debug
         StartCoroutine(InitGame());
     }
 
@@ -72,6 +70,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator InitGame()
     {
+        ClearGame();
         player.CanPlay(false);
         for (int i = 0; i < 2; i++)
         {
@@ -95,8 +94,27 @@ public class GameManager : MonoBehaviour
         player.CanPlay(true);
     }
 
-    public void NextTurn()
+    public IEnumerator NextTurn(bool isPlayer)
     {
+        print("Starting " + Time.time);
+        if (isPlayer)
+        {
+            print("Hiding " + Time.time);
+            // Attente de disparition du message KOIKOI Player
+            
+            yield return koikoiPopUp.StartCoroutine(koikoiPopUp.Hide());
+            // Affichage réponse du player : Fin du tour
+            print("Showing " + Time.time);
+            yield return StartCoroutine(PopUpKoiKoi(KoiKoiPopUp.Type.END, player));
+
+            // Réponse reste visible x secondes et disparait
+            yield return koikoiPopUp.StartCoroutine(koikoiPopUp.HideAfterSeconds(0.5f));
+        }
+        // Réinitialisation de l'UI
+        yield return StartCoroutine(Fade(BlackOverlay, BlackOverlay.color.a, 0f, 0.2f));
+        koikoiPopUp.gameObject.SetActive(false);
+
+        // Réinitialisation du jeu
         ClearGame();
         StartCoroutine(InitGame());
     }
@@ -105,7 +123,7 @@ public class GameManager : MonoBehaviour
     {
         if(hand.hasYakus())
         {
-            if (hand is Player) PopUpKoiKoi(KoiKoiPopUp.Type.PLAYER);
+            if (hand is Player) StartCoroutine(PopUpKoiKoi(KoiKoiPopUp.Type.PLAYER));
             else if (hand is AI) ((AI)hand).canKoikoi = true;
         }
         hand.CanPlay(false);
@@ -197,10 +215,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void PopUpKoiKoi(KoiKoiPopUp.Type type, Hand hand=null)
+    public IEnumerator PopUpKoiKoi(KoiKoiPopUp.Type type, Hand hand=null)
     {
         DesactivateButtons();
-        koikoiPopUp.Show(type, hand);
+        yield return StartCoroutine(koikoiPopUp.Show(type, hand));
     }
 
     public void DesactivateButtons()

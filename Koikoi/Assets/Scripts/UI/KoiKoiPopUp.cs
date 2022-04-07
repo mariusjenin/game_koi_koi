@@ -29,7 +29,7 @@ public class KoiKoiPopUp : MonoBehaviour
         SetPopUpOpacity(0);
     }
 
-    public void Show(Type type, Hand hand)
+    public IEnumerator Show(Type type, Hand hand)
     {
         string player;
         GameManager.instance.FadeInGame();
@@ -56,8 +56,6 @@ public class KoiKoiPopUp : MonoBehaviour
 
                 player = (hand is Player) ? "you" : "the AI";
                 Message.SetText("Koikoi declared by " + player + ".");
-
-                StartCoroutine(HideAfterSeconds(1.5f));
                 break;
 
             case Type.END:
@@ -69,23 +67,21 @@ public class KoiKoiPopUp : MonoBehaviour
 
                 player = (hand is Player) ? "You" : "The AI";
                 Message.SetText(player + " ended the turn.");
-
-                StartCoroutine(HideAfterSeconds(1.5f));
                 break;
         }
-        StartCoroutine(Fade(0f, 1f, 0.2f));
+        yield return StartCoroutine(Fade(0f, 1f, 0.2f));
     }
 
-    public void Hide()
+    public IEnumerator Hide()
     {
-        GameManager.instance.FadeOutGame();
         EndButton.GetComponent<Button>().enabled = false;
         KoiKoiButton.GetComponent<Button>().enabled = false;
-        StartCoroutine(Fade(1f, 0f, 0.2f));
-
+        print("Fading " + Time.time);
+        yield return StartCoroutine(Fade(1f, 0f, 0.2f));
+        print("End hide " + Time.time);
     }
 
-    private IEnumerator HideAfterSeconds(float duration)
+    public IEnumerator HideAfterSeconds(float duration)
     {
         float timer = 0f;
         while (timer <= duration)
@@ -93,14 +89,13 @@ public class KoiKoiPopUp : MonoBehaviour
             timer += Time.deltaTime;
             yield return new WaitForSeconds(Time.deltaTime);
         }
-        Hide();
+        yield return StartCoroutine(Hide());
         GameManager.instance.ActivateButtons();
     }
 
     public void onClickEndTurn()
     {
-        Hide();
-        GameManager.instance.NextTurn();
+        StartCoroutine(GameManager.instance.NextTurn(true));
     }
 
     public void onClickKoiKoi()
@@ -110,6 +105,8 @@ public class KoiKoiPopUp : MonoBehaviour
 
     private IEnumerator Fade(float start, float end, float duration)
     {
+        yield return new WaitForSeconds(0.02f);
+
         float timer = 0f;
         AnimationCurve smoothCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0f, 0f), new Keyframe(1f, 1f) });
 
@@ -120,8 +117,7 @@ public class KoiKoiPopUp : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
         }
 
-        // Si on cherche à cacher l'UI, à la fin on le désactive
-        if(end == 0f) gameObject.SetActive(false);
+        print("End fading " + Time.time);
     }
 
     private void SetPopUpOpacity(float a)
