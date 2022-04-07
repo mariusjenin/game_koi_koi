@@ -34,7 +34,6 @@ public class Player :  Hand
 
                 // Affichage de la carte sur le deck, et des cartes du joueur associables
                 deck.DisplayOnTop();
-                deck.DisplayTopCardAssociable();
             }
             // Le Joueur sélectionne une autre carte
             else
