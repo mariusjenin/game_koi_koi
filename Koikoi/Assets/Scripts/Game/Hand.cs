@@ -46,28 +46,35 @@ public class Hand : CardZone
         return yakus.score.yakus.Count > lastYakusCount;
     }
 
-
     public void AddCardToYakus(Card card)
     {
-        Destroy(card.GetUI().GetComponent<Button>());
-        yakus.AddCard(card);
+        StartCoroutine(AddCardToYakusCoroutine(card));
+    }
+
+    private IEnumerator AddCardToYakusCoroutine(Card card)
+    {
 
         // Animation
         switch (card.type)
         {
             case Card.Type.Hikari:
-                StartCoroutine(GameManager.instance.AddCardCouroutine(card.GetUI().transform, yakus.HikariGrid.transform));
+                yield return StartCoroutine(GameManager.instance.AddCardCouroutine(card.GetUI().transform, yakus.HikariGrid.transform));
                 break;
             case Card.Type.Kasu:
-                StartCoroutine(GameManager.instance.AddCardCouroutine(card.GetUI().transform, yakus.KasuGrid.transform));
+                yield return StartCoroutine(GameManager.instance.AddCardCouroutine(card.GetUI().transform, yakus.KasuGrid.transform));
                 break;
             case Card.Type.Tan:
-                StartCoroutine(GameManager.instance.AddCardCouroutine(card.GetUI().transform, yakus.TanGrid.transform));
+                yield return StartCoroutine(GameManager.instance.AddCardCouroutine(card.GetUI().transform, yakus.TanGrid.transform));
                 break;
             case Card.Type.Tane:
-                StartCoroutine(GameManager.instance.AddCardCouroutine(card.GetUI().transform, yakus.TaneGrid.transform));
+                yield return StartCoroutine(GameManager.instance.AddCardCouroutine(card.GetUI().transform, yakus.TaneGrid.transform));
                 break;
         }
+
+        Destroy(card.GetUI().canvas.gameObject);
+
+        Destroy(card.GetUI().GetComponent<Button>());
+        yakus.AddCard(card);
     }
     
     public void AddCardToBoard(Card card)
