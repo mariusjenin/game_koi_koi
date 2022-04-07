@@ -12,16 +12,19 @@ public class KoiKoiPopUp : MonoBehaviour
 
     private GameObject EndImage;
     private GameObject KoiKoiImage;
+    private GameObject TieImage;
 
     private GameObject EndButton;
     private GameObject KoiKoiButton;
 
-    public enum Type { PLAYER, KOIKOI, END};
+    public enum Type { PLAYER, KOIKOI, END, TIE};
 
     private void Awake()
     {
         EndImage = ImagesGrid.transform.GetChild(0).gameObject;
         KoiKoiImage = ImagesGrid.transform.GetChild(1).gameObject;
+        TieImage = ImagesGrid.transform.GetChild(2).gameObject;
+
         EndButton = ButtonsGrid.transform.GetChild(0).gameObject;
         KoiKoiButton = ButtonsGrid.transform.GetChild(1).gameObject;
 
@@ -43,15 +46,19 @@ public class KoiKoiPopUp : MonoBehaviour
                 EndButton.SetActive(true);
                 KoiKoiImage.SetActive(true);
                 KoiKoiButton.SetActive(true);
+
+                TieImage.SetActive(false);
                 Message.gameObject.SetActive(false);
                 break;
 
             case Type.KOIKOI:
                 Message.gameObject.SetActive(true);
                 KoiKoiImage.SetActive(true);
+
                 EndImage.SetActive(false);
                 EndButton.SetActive(false);
                 KoiKoiButton.SetActive(false);
+                TieImage.SetActive(false);
 
                 player = (hand is Player) ? "you" : "the AI";
                 Message.SetText("Koikoi declared by " + player + ".");
@@ -60,12 +67,26 @@ public class KoiKoiPopUp : MonoBehaviour
             case Type.END:
                 Message.gameObject.SetActive(true);
                 EndImage.SetActive(true);
+
+                EndButton.SetActive(false);
+                KoiKoiImage.SetActive(false);
+                KoiKoiButton.SetActive(false);
+                TieImage.SetActive(false);
+
+                player = (hand is Player) ? "You" : "The AI";
+                Message.SetText(player + " ended the round.");
+                break;
+
+            case Type.TIE:
+                Message.gameObject.SetActive(true);
+                TieImage.SetActive(true);
+
+                EndImage.SetActive(false);
                 EndButton.SetActive(false);
                 KoiKoiImage.SetActive(false);
                 KoiKoiButton.SetActive(false);
 
-                player = (hand is Player) ? "You" : "The AI";
-                Message.SetText(player + " ended the round.");
+                Message.SetText("The round ended in a tie.");
                 break;
         }
         yield return StartCoroutine(Fade(0f, 1f, 0.2f));
@@ -123,6 +144,12 @@ public class KoiKoiPopUp : MonoBehaviour
         yield return StartCoroutine(HideAfterSeconds(0.5f));
     }
 
+    public IEnumerator TieCoroutine()
+    {
+        yield return StartCoroutine(Show(Type.TIE, null));
+        yield return StartCoroutine(HideAfterSeconds(0.5f));
+    }
+
     private IEnumerator Fade(float start, float end, float duration)
     {
         yield return new WaitForSeconds(0.02f);
@@ -144,8 +171,7 @@ public class KoiKoiPopUp : MonoBehaviour
 
         foreach (Transform child in ImagesGrid.transform)
         {
-            SetImageOpacity(EndImage.GetComponent<Image>(), a);
-            SetImageOpacity(KoiKoiImage.GetComponent<Image>(), a);
+            SetImageOpacity(child.GetComponent<Image>(), a);
         }
 
         foreach (Transform child in ButtonsGrid.transform)

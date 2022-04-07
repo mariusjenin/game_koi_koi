@@ -130,14 +130,33 @@ public class GameManager : MonoBehaviour
         yield return StartCoroutine(Fade(BlackOverlay, BlackOverlay.color.a, 0f, 0.2f));
         koikoiPopUp.gameObject.SetActive(false);
     }
+    public IEnumerator Tie()
+    {
+        koikoiPopUp.gameObject.SetActive(true);
+
+        yield return StartCoroutine(Fade(BlackOverlay, BlackOverlay.color.a, 0.5f, 0.2f));
+
+        yield return StartCoroutine(koikoiPopUp.TieCoroutine());
+
+        // Réinitialisation de l'UI après fade out
+        yield return StartCoroutine(Fade(BlackOverlay, BlackOverlay.color.a, 0f, 0.2f));
+        koikoiPopUp.gameObject.SetActive(false);
+
+        // Réinitialisation du jeu
+        StartCoroutine(InitGame());
+    }
+
 
     public void HandFinishTurn(Hand hand)
     {
+        // On vérifie si l'entité a un yaku
         if (hand.hasYakus())
         {
             if (hand is Player) StartCoroutine(PopUpKoiKoi(KoiKoiPopUp.Type.PLAYER));
             else if (hand is AI) ((AI)hand).canKoikoi = true;
         }
+
+        // On passe la main à l'autre entité
         hand.CanPlay(false);
         if (hand is Player) ai.CanPlay(true);
         else player.CanPlay(true);
@@ -239,6 +258,11 @@ public class GameManager : MonoBehaviour
 
         yield return StartCoroutine(FadeInGame());
         yield return StartCoroutine(koikoiPopUp.Show(type, hand));
+    }
+
+    public bool CheckForTie()
+    {
+        return player.Cards.Count <= 0 && ai.Cards.Count <= 0;
     }
 
     public void DesactivateButtons()
