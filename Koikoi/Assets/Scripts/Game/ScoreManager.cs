@@ -158,7 +158,7 @@ namespace Game
                         break;
                 }
             }
-            return score;
+            return GameManager.instance.koikoi ? score * 2 : score;
         }
         
         
