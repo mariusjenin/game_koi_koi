@@ -250,7 +250,7 @@ public class AI : Hand
             gsai.aiYakusCards = new List<Card>(this.yakus.Cards);
             gsai.playerYaskusCards = new List<Card>(GameManager.instance.player.yakus.Cards);
             gsai.boardCards = new List<Card>(board.Cards);
-            AI.GameStateAI.Action act = gsai.Minimax(false, 2).act;
+            AI.GameStateAI.Action act = gsai.Minimax(false, 1).act;
 
             ExecuteAction(act);
 

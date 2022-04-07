@@ -38,6 +38,9 @@ public class Hand : CardZone
     public virtual void CanPlay(bool canPlay)
     {
         this.canPlay = canPlay;
+
+        if (canPlay && Cards.Count == 0 && GameManager.instance.CheckForTie()) 
+            StartCoroutine(GameManager.instance.Tie());
     }
 
     public bool hasYakus()
