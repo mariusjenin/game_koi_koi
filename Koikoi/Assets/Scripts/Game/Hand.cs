@@ -16,6 +16,25 @@ public class Hand : CardZone
         yakus.score = new ScoreManager(yakus.Cards);
     }
 
+    public override void Reset()
+    {
+        base.Reset();
+        yakus.Cards.Clear();
+        lastYakusCount = 0;
+
+        for (var i = yakus.HikariGrid.transform.childCount - 1; i >= 0; i--)
+            Destroy(yakus.HikariGrid.transform.GetChild(i).gameObject);
+
+        for (var i = yakus.KasuGrid.transform.childCount - 1; i >= 0; i--)
+            Destroy(yakus.KasuGrid.transform.GetChild(i).gameObject);
+
+        for (var i = yakus.TanGrid.transform.childCount - 1; i >= 0; i--)
+            Destroy(yakus.TanGrid.transform.GetChild(i).gameObject);
+
+        for (var i = yakus.TaneGrid.transform.childCount - 1; i >= 0; i--)
+            Destroy(yakus.TaneGrid.transform.GetChild(i).gameObject);
+    }
+
     public virtual void CanPlay(bool canPlay)
     {
         this.canPlay = canPlay;

@@ -33,12 +33,10 @@ public class GameManager : MonoBehaviour
     public AI ai;
     public Board board;
 
-    private List<Card> gameCards;
 
     private void Awake()
     {
         instance = this;
-        gameCards = new List<Card>(deck.Cards);
     }
 
     private void Start()
@@ -48,24 +46,22 @@ public class GameManager : MonoBehaviour
 
     private void ClearGame()
     {
+        player.Reset();
+        ai.Reset();
+        board.Reset();
+        deck.Reset();
+
         // Clear Player hand
         for (var i = PlayerGrid.transform.childCount - 1; i >= 0; i--)
             Destroy(PlayerGrid.transform.GetChild(i).gameObject);
-        player.Cards.Clear();
 
         // Clear AI hand
         for (var i = AIGrid.transform.childCount - 1; i >= 0; i--)
             Destroy(AIGrid.transform.GetChild(i).gameObject);
-        ai.Cards.Clear();
 
         // Clear Board
         for (var i = BoardGrid.transform.childCount - 1; i >= 0; i--)
             Destroy(BoardGrid.transform.GetChild(i).gameObject);
-        board.Cards.Clear();
-
-        // Reset deck cards
-        deck.Cards = new List<Card>(gameCards);
-
     }
 
     private IEnumerator InitGame()
@@ -96,32 +92,29 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator NextTurn(bool isPlayer)
     {
-        print("Starting " + Time.time);
         if (isPlayer)
         {
-            print("Hiding " + Time.time);
             // Attente de disparition du message KOIKOI Player
-            
             yield return koikoiPopUp.StartCoroutine(koikoiPopUp.Hide());
+
             // Affichage réponse du player : Fin du tour
-            print("Showing " + Time.time);
             yield return StartCoroutine(PopUpKoiKoi(KoiKoiPopUp.Type.END, player));
 
             // Réponse reste visible x secondes et disparait
             yield return koikoiPopUp.StartCoroutine(koikoiPopUp.HideAfterSeconds(0.5f));
         }
-        // Réinitialisation de l'UI
+        // Réinitialisation de l'UI après fade out
         yield return StartCoroutine(Fade(BlackOverlay, BlackOverlay.color.a, 0f, 0.2f));
         koikoiPopUp.gameObject.SetActive(false);
 
         // Réinitialisation du jeu
-        ClearGame();
         StartCoroutine(InitGame());
     }
 
     public void HandFinishTurn(Hand hand)
     {
-        if(hand.hasYakus())
+        if(hand is Player) StartCoroutine(PopUpKoiKoi(KoiKoiPopUp.Type.PLAYER));
+        if (hand.hasYakus())
         {
             if (hand is Player) StartCoroutine(PopUpKoiKoi(KoiKoiPopUp.Type.PLAYER));
             else if (hand is AI) ((AI)hand).canKoikoi = true;

@@ -6,6 +6,10 @@ namespace Game
 {
     public class CardZone: MonoBehaviour
     {
+        public virtual void Reset()
+        {
+            Cards.Clear();
+        }
 
         public List<Card> Cards = new List<Card>();
         

@@ -5,7 +5,20 @@ using UnityEngine;
 
 public class Deck : CardZone
 {
+    private List<Card> gameCards;
     public Card topCard;
+
+    private void Awake()
+    {
+        gameCards = new List<Card>(Cards);
+    }
+
+    public override void Reset()
+    {
+        base.Reset();
+        Cards = new List<Card>(gameCards);
+        topCard = null;
+    }
     public Card Draw()
     {
         int random = Random.Range(0,Cards.Count);

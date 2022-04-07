@@ -8,7 +8,6 @@ public class Player :  Hand
 
     public Card selectedCard;
 
-
     public void SelectCard(Card card)
     {
         if(canPlay)
@@ -16,7 +15,6 @@ public class Player :  Hand
             // Le Joueur n'avait pas de carte sélectionné
             if(selectedCard == null)
             {
-                StartCoroutine(GameManager.instance.PopUpKoiKoi(KoiKoiPopUp.Type.PLAYER));
                 GameManager.instance.FadeInGame();
                 selectedCard = card;
                 selectedCard.GetUI().Show();

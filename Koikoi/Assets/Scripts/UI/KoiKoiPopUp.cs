@@ -76,9 +76,7 @@ public class KoiKoiPopUp : MonoBehaviour
     {
         EndButton.GetComponent<Button>().enabled = false;
         KoiKoiButton.GetComponent<Button>().enabled = false;
-        print("Fading " + Time.time);
         yield return StartCoroutine(Fade(1f, 0f, 0.2f));
-        print("End hide " + Time.time);
     }
 
     public IEnumerator HideAfterSeconds(float duration)
@@ -116,8 +114,6 @@ public class KoiKoiPopUp : MonoBehaviour
             SetPopUpOpacity(Mathf.Lerp(start, end, smoothCurve.Evaluate(timer / duration)));
             yield return new WaitForSeconds(0.01f);
         }
-
-        print("End fading " + Time.time);
     }
 
     private void SetPopUpOpacity(float a)
