@@ -23,6 +23,13 @@ public class AI : Hand
             public ActionPart actPart2;
         }
         
+        public struct ActionPossible
+        {
+            public bool playerTarget;
+            public ActionPart actPart1;
+            public List<ActionPart> actParts2;
+        }
+        
         public struct ActionPart
         {
             public bool pairDone;
@@ -111,14 +118,12 @@ public class AI : Hand
             }
         }
         
-        public  List<Action> GetActions(bool player) //false : IA | true : player
+        public  List<ActionPossible> GetActions(bool player) //false : IA | true : player
         {
             List<Card> handPart1 = player?playerAndDeckCards:aiCards;
-            List<Card> handPart2 = player?playerAndDeckCards:deckCards;
 
-            List<Action> actions = new List<Action>();
+            List<ActionPossible> actions = new List<ActionPossible>();
             List<ActionPart> actionParts1 = new List<ActionPart>();
-            List<ActionPart> actionParts2 = new List<ActionPart>();
             
             //Part 1
             for (int i = 0; i < handPart1.Count; i++)
@@ -147,47 +152,68 @@ public class AI : Hand
                 }
             }
             
+            
+            
             //Part 2
-            for (int i = 0; i < handPart2.Count; i++)
+            for (int i = 0; i < actionParts1.Count; i++)
             {
-                bool found = false;
-                for (int j = 0; j < boardCards.Count; j++)
+                List<Card> handPart2 = new List<Card>(player?playerAndDeckCards:aiCards);
+                List<Card> board = new List<Card>(boardCards);
+                handPart2.Remove(actionParts1[i].card1);
+                if (actionParts1[i].pairDone)
                 {
-                    if (handPart2[i].month == boardCards[j].month)
-                    {
-                        
-                        ActionPart actPart2 = new ActionPart();
-                        actPart2.pairDone = true;
-                        actPart2.card1 = handPart2[i];
-                        actPart2.card2 = boardCards[j];
-                        actionParts2.Add(actPart2);
-                        found = true;
-                    }
+                    board.Remove(actionParts1[i].card2);
+                }
+                else
+                {
+                    board.Add(actionParts1[i].card1);
                 }
 
-                if (!found)
+                ActionPossible actionPossible = new ActionPossible();
+                
+                List<ActionPart> actionParts2 = new List<ActionPart>();
+                bool found = false;
+                for (int j = 0; j < handPart2.Count; j++)
                 {
-                    ActionPart actPart2 = new ActionPart();
-                    actPart2.pairDone = false;
-                    actPart2.card1 = handPart2[i];
-                    actionParts2.Add(actPart2);
+                    for (int k = 0; k < boardCards.Count; k++)
+                    {
+                        if (handPart2[j].month == boardCards[k].month)
+                        {
+                            ActionPart actPart2 = new ActionPart();
+                            actPart2.pairDone = true;
+                            actPart2.card1 = handPart2[j];
+                            actPart2.card2 = boardCards[k];
+                            actionParts2.Add(actPart2);
+                            found = true;
+                        }
+                    }
+                    if (!found)
+                    {
+                        ActionPart actPart2 = new ActionPart();
+                        actPart2.pairDone = false;
+                        actPart2.card1 = handPart2[j];
+                        actionParts2.Add(actPart2);
+                    }
                 }
+                actionPossible.actPart1 = actionParts1[i];
+                actionPossible.actParts2 = actionParts2;
+                actions.Add(actionPossible);
             }
 
             //Combining the both part TODO à revoir car cette fâçon n'explore pas toutes les possibilités
-            for (int i = 0; i < actionParts1.Count; i++)
-            {
-                for (int j = 0; j < actionParts2.Count; j++)
-                {
-                    if (actionParts1[i].card1 != actionParts2[j].card1 && actionParts1[i].card2 != actionParts2[j].card2)
-                    {
-                        Action act = new Action();
-                        act.actPart1 = actionParts1[i];
-                        act.actPart2 = actionParts2[j];
-                        actions.Add(act);
-                    }
-                }
-            }
+            // for (int i = 0; i < actionParts1.Count; i++)
+            // {
+            //     for (int j = 0; j < actionParts2.Count; j++)
+            //     {
+            //         if (actionParts1[i].card1 != actionParts2[j].card1 && actionParts1[i].card2 != actionParts2[j].card2)
+            //         {
+            //             Action act = new Action();
+            //             act.actPart1 = actionParts1[i];
+            //             act.actPart2 = actionParts2[j];
+            //             actions.Add(act);
+            //         }
+            //     }
+            // }
             return actions;
         }
 
@@ -195,11 +221,12 @@ public class AI : Hand
         public struct MinimaxResult
         {
             public int score;
-            public Action act;
+            public ActionPossible act;
         }
         public MinimaxResult Minimax(bool player, int depth)
         {
-            List<Action> acts = GetActions(player);
+            List<ActionPossible> acts = GetActions(player);
+            Debug.Log(acts.Count);
             
             if (depth <= 0 || acts.Count <= 0)
             {
@@ -214,18 +241,25 @@ public class AI : Hand
             mmr.score = score;
             for (int i = 0; i < acts.Count; i ++)
             {
-                GameStateAI gsai = new GameStateAI(this);
-                gsai.ApplyAction(acts[i]);
+                ActionPossible actionPossible = acts[i];
+                for (int j = 0; j < actionPossible.actParts2.Count; j++)
+                {
+                    GameStateAI gsai = new GameStateAI(this);
+                    Action act = new Action();
+                    act.actPart1 = actionPossible.actPart1;
+                    act.actPart2 = actionPossible.actParts2[j];
+                    gsai.ApplyAction(act);
 
-                MinimaxResult currMmr = gsai.Minimax(!player,depth-1);
-                currMmr.act = acts[i];
-                if (player)
-                {
-                    if (currMmr.score > mmr.score) mmr = currMmr;
-                }
-                else
-                {
-                    if (currMmr.score < mmr.score) mmr = currMmr;
+                    MinimaxResult currMmr = gsai.Minimax(!player,depth-1);
+                    currMmr.act = actionPossible;
+                    if (player)
+                    {
+                        if (currMmr.score > mmr.score) mmr = currMmr;
+                    }
+                    else
+                    {
+                        if (currMmr.score < mmr.score) mmr = currMmr;
+                    }
                 }
             }
             return mmr;
@@ -250,9 +284,9 @@ public class AI : Hand
             gsai.aiYakusCards = new List<Card>(this.yakus.Cards);
             gsai.playerYaskusCards = new List<Card>(GameManager.instance.player.yakus.Cards);
             gsai.boardCards = new List<Card>(board.Cards);
-            AI.GameStateAI.Action act = gsai.Minimax(false, 2).act;
+            AI.GameStateAI.ActionPossible actionPossible = gsai.Minimax(false, 1).act;
 
-            ExecuteAction(act);
+            ExecuteAction(actionPossible);
 
             // Au tour du joueur de jouer
             GameManager.instance.HandFinishTurn(this);
@@ -271,7 +305,7 @@ public class AI : Hand
         }
     }
 
-    private void ExecuteAction(AI.GameStateAI.Action act)
+    private void ExecuteAction(AI.GameStateAI.ActionPossible act)
     {
         
         //PART 1
@@ -291,25 +325,36 @@ public class AI : Hand
         RemoveCard(act.actPart1.card1);
         
         //PART 2
+        Card card = GameManager.instance.deck.Draw();
         // Création d'un template image à la position du deck
-        GameObject gObject = Instantiate(GameManager.instance.template, GameManager.instance.deck.transform.position, GameManager.instance.deck.transform.rotation, GameManager.instance.deck.transform.parent.transform);
+        Transform deckTransform = GameManager.instance.deck.transform;
+        GameObject gObject = Instantiate(GameManager.instance.template, deckTransform.position, deckTransform.rotation, deckTransform.parent.transform);
         UICard uiCard = gObject.GetComponentInChildren<UICard>();
-        act.actPart2.card1.SetUICard(uiCard);
-        uiCard.Init(this, act.actPart2.card1, gObject.GetComponent<Canvas>());
-        act.actPart2.card1.GetUI().Display();
-        if (act.actPart2.pairDone)
+        card.SetUICard(uiCard);
+        uiCard.Init(this, card, gObject.GetComponent<Canvas>());
+        card.GetUI().Display();
+        GameStateAI.ActionPart actPart2 = new GameStateAI.ActionPart();
+        for (int i = 0; i < act.actParts2.Count; i++)
+        {
+            if (act.actParts2[i].card1 == card)
+            {
+                actPart2 = act.actParts2[i];
+                break;
+            }
+        }
+        if (actPart2.pairDone)
         {
             // Anime les deux cartes vers la bonne zone Yakus
-            AddCardToYakus(act.actPart2.card2);
-            AddCardToYakus(act.actPart2.card1);
+            AddCardToYakus(actPart2.card2);
+            AddCardToYakus(actPart2.card1);
             // Supprime les cartes de la main et du board
-            board.RemoveCard(act.actPart2.card2);
+            board.RemoveCard(actPart2.card2);
         }
         else
         {
-            AddCardToBoard(act.actPart2.card1);
+            AddCardToBoard(actPart2.card1);
         }
-        GameManager.instance.deck.RemoveCard(act.actPart2.card1);
+        GameManager.instance.deck.RemoveCard(actPart2.card1);
 
 
     }
