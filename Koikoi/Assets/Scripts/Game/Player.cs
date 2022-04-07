@@ -15,7 +15,7 @@ public class Player :  Hand
             // Le Joueur n'avait pas de carte sélectionné
             if(selectedCard == null)
             {
-                GameManager.instance.FadeInGame();
+                StartCoroutine(GameManager.instance.FadeInGame());
                 selectedCard = card;
                 selectedCard.GetUI().Show();
                 Board.DisplayAssociableCards(selectedCard);

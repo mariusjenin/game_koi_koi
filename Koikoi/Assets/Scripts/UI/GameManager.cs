@@ -13,7 +13,9 @@ public class GameManager : MonoBehaviour
 
     // Values
     public int MaxTurn = 12;
-    public float speed = 20;
+    public bool koikoi = false;
+
+    private float speed = 20;
 
     // UI GameObjects
     public TextMeshProUGUI Turn;
@@ -50,6 +52,7 @@ public class GameManager : MonoBehaviour
         ai.Reset();
         board.Reset();
         deck.Reset();
+        koikoi = false;
 
         // Clear Player hand
         for (var i = PlayerGrid.transform.childCount - 1; i >= 0; i--)
@@ -184,14 +187,14 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void FadeInGame()
+    public IEnumerator FadeInGame()
     {
-        StartCoroutine(Fade(BlackOverlay, BlackOverlay.color.a, 0.5f, 0.2f));
+        yield return StartCoroutine(Fade(BlackOverlay, BlackOverlay.color.a, 0.5f, 0.2f));
     }
 
-    public void FadeOutGame()
+    public IEnumerator FadeOutGame()
     {
-        StartCoroutine(Fade(BlackOverlay, BlackOverlay.color.a, 0f, 0.2f));
+        yield return StartCoroutine(Fade(BlackOverlay, BlackOverlay.color.a, 0f, 0.2f));
     }
 
     private IEnumerator Fade(Image img, float start, float end, float duration)
@@ -211,6 +214,7 @@ public class GameManager : MonoBehaviour
     public IEnumerator PopUpKoiKoi(KoiKoiPopUp.Type type, Hand hand=null)
     {
         DesactivateButtons();
+        StartCoroutine(FadeInGame());
         yield return StartCoroutine(koikoiPopUp.Show(type, hand));
     }
 

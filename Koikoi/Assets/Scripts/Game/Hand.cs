@@ -8,7 +8,7 @@ public class Hand : CardZone
 {
     public Deck deck;
     public ZoneYakus yakus;
-    int lastYakusCount = 0;
+    public int lastYakusCount = 0;
 
     protected bool canPlay = false;
     private void Awake()

@@ -101,7 +101,7 @@ public class UICard : MonoBehaviour
 
             // R�initialisation 
             deck.topCard = null;
-            GameManager.instance.FadeOutGame();
+            StartCoroutine(GameManager.instance.FadeOutGame());
 
             // Au tour de l'IA de jouer
             GameManager.instance.HandFinishTurn(player);
@@ -131,7 +131,7 @@ public class UICard : MonoBehaviour
 
         // R�initialisation 
         GameManager.instance.deck.topCard = null;
-        GameManager.instance.FadeOutGame();
+        StartCoroutine(GameManager.instance.FadeOutGame());
 
         // Au tour de l'IA de jouer
         GameManager.instance.HandFinishTurn(GameManager.instance.player);

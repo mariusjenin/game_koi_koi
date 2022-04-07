@@ -32,7 +32,6 @@ public class KoiKoiPopUp : MonoBehaviour
     public IEnumerator Show(Type type, Hand hand)
     {
         string player;
-        GameManager.instance.FadeInGame();
         gameObject.SetActive(true);
         EndButton.GetComponent<Button>().enabled = true;
         KoiKoiButton.GetComponent<Button>().enabled = true;
@@ -98,7 +97,20 @@ public class KoiKoiPopUp : MonoBehaviour
 
     public void onClickKoiKoi()
     {
-        Debug.Log("test");
+        // Set koikoi state to true
+        GameManager.instance.koikoi = true;
+        // Player'll need one more yaku to trigger the koikoi
+        GameManager.instance.player.lastYakusCount++;
+        StartCoroutine(KoikoiCoroutine());
+    }
+
+    private IEnumerator KoikoiCoroutine()
+    {
+        yield return StartCoroutine(Hide());
+        yield return StartCoroutine(Show(Type.KOIKOI, GameManager.instance.player));
+        yield return StartCoroutine(HideAfterSeconds(0.5f));
+        yield return StartCoroutine(GameManager.instance.FadeOutGame());
+        gameObject.SetActive(false);
     }
 
     private IEnumerator Fade(float start, float end, float duration)
