@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 namespace Game
 {
@@ -12,5 +13,13 @@ namespace Game
         public GameObject KasuGrid;
 
         public ScoreManager score;
+
+        public int getScore()
+        {
+            this.score.SetCards(Cards);
+            int s = score.EvaluateScore();
+            Debug.Log(s);
+            return s;
+        }
     }
 }

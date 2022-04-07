@@ -70,7 +70,6 @@ public class GameManager : MonoBehaviour
     private IEnumerator InitGame()
     {
         ClearGame();
-        UpdateScore();
 
         player.CanPlay(false);
         for (int i = 0; i < 2; i++)
@@ -100,7 +99,6 @@ public class GameManager : MonoBehaviour
         koikoiPopUp.gameObject.SetActive(true);
 
         Hand hand = isPlayer ? player : ai;
-        hand.lastYakusCount++;
 
         yield return StartCoroutine(Fade(BlackOverlay, BlackOverlay.color.a, 0.5f, 0.2f));
 
@@ -110,6 +108,7 @@ public class GameManager : MonoBehaviour
         yield return StartCoroutine(Fade(BlackOverlay, BlackOverlay.color.a, 0f, 0.2f));
         koikoiPopUp.gameObject.SetActive(false);
 
+        UpdateScore(isPlayer);
         // Réinitialisation du jeu
         StartCoroutine(InitGame());
     }
@@ -134,7 +133,7 @@ public class GameManager : MonoBehaviour
 
     public void HandFinishTurn(Hand hand)
     {
-        if (hand is Player) StartCoroutine(PopUpKoiKoi(KoiKoiPopUp.Type.PLAYER));
+        // if (hand is Player) StartCoroutine(PopUpKoiKoi(KoiKoiPopUp.Type.PLAYER));
         if (hand.hasYakus())
         {
             if (hand is Player) StartCoroutine(PopUpKoiKoi(KoiKoiPopUp.Type.PLAYER));
@@ -161,10 +160,16 @@ public class GameManager : MonoBehaviour
     }
 
     // Fonction mettant � jour le score du joueur ou de l'IA
-    void UpdateScore()
+    void UpdateScore(bool isPlayer)
     {
-        PlayerScore.SetText("" + player.yakus.score.EvaluateScore());
-        AIScore.SetText("" + ai.yakus.score.EvaluateScore());
+        if (isPlayer)
+        {
+            PlayerScore.SetText("" + player.yakus.getScore());
+        }
+        else
+        {
+            AIScore.SetText("" + ai.yakus.getScore());
+        }
     }
 
     private IEnumerator NewCard(CardZone cz)

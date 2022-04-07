@@ -421,6 +421,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 382014765, guid: 9733df423e28680428970e2e7136edc1, type: 3}
+      propertyPath: m_text
+      value: End round
+      objectReference: {fileID: 0}
     - target: {fileID: 432035147, guid: 9733df423e28680428970e2e7136edc1, type: 3}
       propertyPath: m_IsActive
       value: 1

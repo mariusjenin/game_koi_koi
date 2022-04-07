@@ -65,7 +65,7 @@ public class KoiKoiPopUp : MonoBehaviour
                 KoiKoiButton.SetActive(false);
 
                 player = (hand is Player) ? "You" : "The AI";
-                Message.SetText(player + " ended the turn.");
+                Message.SetText(player + " ended the round.");
                 break;
         }
         yield return StartCoroutine(Fade(0f, 1f, 0.2f));
