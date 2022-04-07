@@ -244,9 +244,9 @@ public class AI : Hand
         {
             if(canKoikoi) // Se met � jour tout seul dans GameManager.EndTurn
             {
-                // D�cision du koikoi
-                // OUI : GameManager.instance.PopUpKoiKoi(KoiKoiPopUp.Type.KOIKOI);
-                // NON : GameManager.instance.PopUpKoiKoi(KoiKoiPopUp.Type.END);
+                // Affichage de la D�cision du koikoi
+                // OUI : GameManager.instance.PopUpKoiKoi(KoiKoiPopUp.Type.KOIKOI, this);
+                // NON : GameManager.instance.PopUpKoiKoi(KoiKoiPopUp.Type.End, this);
             }
 
             GameStateAI gsai = new GameStateAI();

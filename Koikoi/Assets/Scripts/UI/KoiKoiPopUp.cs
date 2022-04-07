@@ -8,6 +8,7 @@ public class KoiKoiPopUp : MonoBehaviour
 {
     public GameObject ImagesGrid;
     public GameObject ButtonsGrid;
+    public TextMeshProUGUI Message;
 
     private GameObject EndImage;
     private GameObject KoiKoiImage;
@@ -28,8 +29,9 @@ public class KoiKoiPopUp : MonoBehaviour
         SetPopUpOpacity(0);
     }
 
-    public void Show(Type type)
+    public void Show(Type type, Hand hand)
     {
+        string player;
         GameManager.instance.FadeInGame();
         gameObject.SetActive(true);
         EndButton.GetComponent<Button>().enabled = true;
@@ -42,20 +44,33 @@ public class KoiKoiPopUp : MonoBehaviour
                 EndButton.SetActive(true);
                 KoiKoiImage.SetActive(true);
                 KoiKoiButton.SetActive(true);
+                Message.gameObject.SetActive(false);
                 break;
 
             case Type.KOIKOI:
+                Message.gameObject.SetActive(true);
                 KoiKoiImage.SetActive(true);
                 EndImage.SetActive(false);
                 EndButton.SetActive(false);
                 KoiKoiButton.SetActive(false);
+
+                player = (hand is Player) ? "you" : "the AI";
+                Message.SetText("Koikoi declared by " + player + ".");
+
+                StartCoroutine(HideAfterSeconds(1.5f));
                 break;
 
             case Type.END:
+                Message.gameObject.SetActive(true);
                 EndImage.SetActive(true);
                 EndButton.SetActive(false);
                 KoiKoiImage.SetActive(false);
                 KoiKoiButton.SetActive(false);
+
+                player = (hand is Player) ? "You" : "The AI";
+                Message.SetText(player + " ended the turn.");
+
+                StartCoroutine(HideAfterSeconds(1.5f));
                 break;
         }
         StartCoroutine(Fade(0f, 1f, 0.2f));
@@ -68,6 +83,18 @@ public class KoiKoiPopUp : MonoBehaviour
         KoiKoiButton.GetComponent<Button>().enabled = false;
         StartCoroutine(Fade(1f, 0f, 0.2f));
 
+    }
+
+    private IEnumerator HideAfterSeconds(float duration)
+    {
+        float timer = 0f;
+        while (timer <= duration)
+        {
+            timer += Time.deltaTime;
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+        Hide();
+        GameManager.instance.ActivateButtons();
     }
 
     public void onClickEndTurn()
@@ -99,6 +126,8 @@ public class KoiKoiPopUp : MonoBehaviour
 
     private void SetPopUpOpacity(float a)
     {
+        Message.color = new Color(Message.color.r, Message.color.g, Message.color.b, a);
+
         foreach (Transform child in ImagesGrid.transform)
         {
             SetImageOpacity(EndImage.GetComponent<Image>(), a);

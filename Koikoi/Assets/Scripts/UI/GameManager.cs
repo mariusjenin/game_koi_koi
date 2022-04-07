@@ -197,11 +197,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void PopUpKoiKoi(KoiKoiPopUp.Type type)
+    public void PopUpKoiKoi(KoiKoiPopUp.Type type, Hand hand=null)
     {
-        FadeInGame();
         DesactivateButtons();
-        koikoiPopUp.Show(type);
+        koikoiPopUp.Show(type, hand);
     }
 
     public void DesactivateButtons()

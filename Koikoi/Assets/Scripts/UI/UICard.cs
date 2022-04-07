@@ -83,10 +83,9 @@ public class UICard : MonoBehaviour
 
     void OnClickPlayer()
     {
-        // Debug.Log("Player");
         ((Player)cardZone).SelectCard(card);
-        
     }
+
     void OnClickBoard()
     {
         // Debug.Log("Board");
