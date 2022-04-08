@@ -180,14 +180,8 @@ public class GameManager : MonoBehaviour
     // Fonction mettant � jour le score du joueur ou de l'IA
     void UpdateScore(bool isPlayer)
     {
-        if (isPlayer)
-        {
-            PlayerScore.SetText("" + player.yakus.getScore());
-        }
-        else
-        {
-            AIScore.SetText("" + ai.yakus.getScore());
-        }
+        PlayerScore.SetText("" + player.yakus.GetScore(isPlayer));
+        AIScore.SetText("" + ai.yakus.GetScore(!isPlayer));
     }
 
     private IEnumerator NewCard(CardZone cz)

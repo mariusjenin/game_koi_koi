@@ -14,10 +14,17 @@ namespace Game
 
         public ScoreManager score;
 
-        public int getScore()
+        private int mScore;
+        public void UpdateScore()
         {
             this.score.SetCards(Cards);
-            return score.EvaluateScore();;
+            int newScore = score.EvaluateScore();
+            mScore += newScore;
+        }
+        public int GetScore(bool shouldUpdate)
+        {
+            if (shouldUpdate) UpdateScore();
+            return mScore;
         }
     }
 }
