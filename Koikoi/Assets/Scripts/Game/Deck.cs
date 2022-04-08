@@ -29,6 +29,9 @@ public class Deck : CardZone
 
     public void DisplayOnTop()
     {
+        // Désactivation des boutons du joueur
+        GameManager.instance.player.DesactivateButtons();
+
         // Création d'un template image à la position du deck
         GameObject gObject = Instantiate(GameManager.instance.template, transform.position, transform.rotation, transform.parent.transform);
 
@@ -40,6 +43,9 @@ public class Deck : CardZone
 
         topCard = card;
         uiCard.Display();
+
+        // Affichage des cartes associables
+        DisplayTopCardAssociable();
     }
 
     public void DisplayTopCardAssociable()

@@ -42,43 +42,6 @@ public class UICard : MonoBehaviour
     public void Display()
     {
         image.sprite = card.sprite;
-        /*
-        switch(card.month)
-        {
-            case Card.Month.January:
-                image.color = Color.black;
-                break;
-            case Card.Month.February:
-                image.color = Color.blue;
-                break;
-            case Card.Month.March:
-                image.color = Color.red;
-                break;
-            case Card.Month.April:
-                image.color = Color.green;
-                break;
-            case Card.Month.May:
-                image.color = Color.gray;
-                break;
-            case Card.Month.June:
-                image.color = Color.cyan;
-                break;
-            case Card.Month.July:
-                image.color = Color.yellow;
-                break;
-            case Card.Month.August:
-                image.color = Color.magenta;
-                break;
-            case Card.Month.September:
-                image.color = new Color(0.5f,1f,0.2f);
-                break;
-            case Card.Month.November:
-                image.color = new Color(0.4f, .3f, 0.0f);
-                break;
-            case Card.Month.December:
-                image.color = new Color(0.8f, .1f, 0.5f);
-                break;
-        }*/
     }
 
     void OnClickPlayer()
@@ -88,11 +51,19 @@ public class UICard : MonoBehaviour
 
     void OnClickBoard()
     {
-        // Debug.Log("Board");
         Player player = GameManager.instance.player;
         AI ai = GameManager.instance.ai;
         Deck deck = GameManager.instance.deck;
 
+        StartCoroutine(BoardCoroutine(player, ai, deck));
+    }
+
+    void OnClickDeck()
+    {
+        StartCoroutine(DeckCoroutine());
+    }
+    public IEnumerator BoardCoroutine(Player player, AI ai, Deck deck)
+    {
         // Si le joueur effectue une association avec la carte du deck
         if (deck.topCard != null)
         {
@@ -101,13 +72,13 @@ public class UICard : MonoBehaviour
 
             // R�initialisation 
             deck.topCard = null;
-            StartCoroutine(GameManager.instance.FadeOutGame());
+            yield return StartCoroutine(GameManager.instance.FadeOutGame());
 
             // Au tour de l'IA de jouer
             GameManager.instance.HandFinishTurn(player);
-        } 
+        }
         // Si le joueur effectue une association avec une carte de sa main
-        else if(player.selectedCard != null)
+        else if (player.selectedCard != null)
         {
 
             // Ajout des 2 cartes au Yakus du joueur
@@ -119,23 +90,22 @@ public class UICard : MonoBehaviour
 
             // Affichage de la carte sur le deck, et des cartes du joueur associables
             deck.DisplayOnTop();
-            deck.DisplayTopCardAssociable();
         }
     }
 
-    void OnClickDeck()
+    public IEnumerator DeckCoroutine()
     {
-        // Debug.Log("Deck");
         // Ajout de la carte au board
         GameManager.instance.player.AddCardToBoard(((Deck)cardZone).topCard);
 
         // R�initialisation 
         GameManager.instance.deck.topCard = null;
-        StartCoroutine(GameManager.instance.FadeOutGame());
+        yield return StartCoroutine(GameManager.instance.FadeOutGame());
 
         // Au tour de l'IA de jouer
         GameManager.instance.HandFinishTurn(GameManager.instance.player);
     }
+
 
     public void Show()
     {
