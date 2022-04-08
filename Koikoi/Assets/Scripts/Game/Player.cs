@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player :  Hand
 {
@@ -39,6 +40,7 @@ public class Player :  Hand
             else
             {
                 selectedCard.GetUI().Hide();
+                selectedCard.GetUI().GetComponent<Button>().interactable = true;
                 selectedCard = card;
                 selectedCard.GetUI().Show();
                 Board.DisplayAssociableCards(selectedCard);

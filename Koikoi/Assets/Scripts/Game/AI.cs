@@ -41,18 +41,20 @@ public class AI : Hand
         public List<Card> aiCards;
         public List<Card> boardCards;
         public List<Card> playerAndDeckCards;
+        public List<Card> aiAndDeckCards;
         public List<Card> deckCards;
         public List<Card> aiYakusCards;
         public List<Card> playerYaskusCards;
 
         public GameStateAI(GameStateAI previous)
         {
-            playerAndDeckCards = previous.playerAndDeckCards;
-            deckCards = previous.deckCards;
-            aiCards = previous.aiCards;
-            boardCards = previous.boardCards;
-            aiYakusCards = previous.aiYakusCards;
-            playerYaskusCards = previous.playerYaskusCards;
+            playerAndDeckCards = new List<Card>(previous.playerAndDeckCards);
+            aiAndDeckCards = new List<Card>(previous.aiAndDeckCards);
+            deckCards = new List<Card>(previous.deckCards);
+            aiCards = new List<Card>(previous.aiCards);
+            boardCards = new List<Card>(previous.boardCards);
+            aiYakusCards = new List<Card>(previous.aiYakusCards);
+            playerYaskusCards = new List<Card>(previous.playerYaskusCards);
         }
         
         public int Utility()
@@ -72,6 +74,7 @@ public class AI : Hand
             if (!act.playerTarget)
             {
                 aiCards.Remove(act.actPart1.card1);
+                aiAndDeckCards.Remove(act.actPart1.card1);
             }
             else
             {
@@ -120,23 +123,23 @@ public class AI : Hand
         
         public  List<ActionPossible> GetActions(bool player) //false : IA | true : player
         {
-            List<Card> handPart1 = player?playerAndDeckCards:aiCards;
+            List<Card> sourceCardPart1 = player?playerAndDeckCards:aiCards;
 
             List<ActionPossible> actions = new List<ActionPossible>();
             List<ActionPart> actionParts1 = new List<ActionPart>();
             
             //Part 1
-            for (int i = 0; i < handPart1.Count; i++)
+            for (int i = 0; i < sourceCardPart1.Count; i++)
             {
                 bool found = false;
                 for (int j = 0; j < boardCards.Count; j++)
                 {
-                    if (handPart1[i].month == boardCards[j].month)
+                    if (sourceCardPart1[i].month == boardCards[j].month)
                     {
                         
                         ActionPart actPart1 = new ActionPart();
                         actPart1.pairDone = true;
-                        actPart1.card1 = handPart1[i];
+                        actPart1.card1 = sourceCardPart1[i];
                         actPart1.card2 = boardCards[j];
                         actionParts1.Add(actPart1);
                         found = true;
@@ -147,19 +150,18 @@ public class AI : Hand
                 {
                     ActionPart actPart1 = new ActionPart();
                     actPart1.pairDone = false;
-                    actPart1.card1 = handPart1[i];
+                    actPart1.card1 = sourceCardPart1[i];
                     actionParts1.Add(actPart1);
                 }
             }
-            
-            
-            
+
             //Part 2
             for (int i = 0; i < actionParts1.Count; i++)
             {
-                List<Card> handPart2 = new List<Card>(player?playerAndDeckCards:aiCards);
+                List<Card> sourceCardPart2 = new List<Card>(player?aiAndDeckCards:playerAndDeckCards);
+                // List<Card> sourceCardPart2 = new List<Card>(deckCards);
                 List<Card> board = new List<Card>(boardCards);
-                handPart2.Remove(actionParts1[i].card1);
+                sourceCardPart2.Remove(actionParts1[i].card1);
                 if (actionParts1[i].pairDone)
                 {
                     board.Remove(actionParts1[i].card2);
@@ -170,20 +172,20 @@ public class AI : Hand
                 }
 
                 ActionPossible actionPossible = new ActionPossible();
-                
-                List<ActionPart> actionParts2 = new List<ActionPart>();
-                bool found = false;
-                for (int j = 0; j < handPart2.Count; j++)
+                actionPossible.actPart1 = actionParts1[i];
+                actionPossible.actParts2 = new List<ActionPart>();
+                for (int j = 0; j < sourceCardPart2.Count; j++)
                 {
-                    for (int k = 0; k < boardCards.Count; k++)
+                    bool found = false;
+                    for (int k = 0; k < board.Count; k++)
                     {
-                        if (handPart2[j].month == boardCards[k].month)
+                        if (sourceCardPart2[j].month == board[k].month)
                         {
                             ActionPart actPart2 = new ActionPart();
                             actPart2.pairDone = true;
-                            actPart2.card1 = handPart2[j];
-                            actPart2.card2 = boardCards[k];
-                            actionParts2.Add(actPart2);
+                            actPart2.card1 = sourceCardPart2[j];
+                            actPart2.card2 = board[k];
+                            actionPossible.actParts2.Add(actPart2);
                             found = true;
                         }
                     }
@@ -191,29 +193,12 @@ public class AI : Hand
                     {
                         ActionPart actPart2 = new ActionPart();
                         actPart2.pairDone = false;
-                        actPart2.card1 = handPart2[j];
-                        actionParts2.Add(actPart2);
+                        actPart2.card1 = sourceCardPart2[j];
+                        actionPossible.actParts2.Add(actPart2);
                     }
                 }
-                actionPossible.actPart1 = actionParts1[i];
-                actionPossible.actParts2 = actionParts2;
                 actions.Add(actionPossible);
             }
-
-            //Combining the both part TODO à revoir car cette fâçon n'explore pas toutes les possibilités
-            // for (int i = 0; i < actionParts1.Count; i++)
-            // {
-            //     for (int j = 0; j < actionParts2.Count; j++)
-            //     {
-            //         if (actionParts1[i].card1 != actionParts2[j].card1 && actionParts1[i].card2 != actionParts2[j].card2)
-            //         {
-            //             Action act = new Action();
-            //             act.actPart1 = actionParts1[i];
-            //             act.actPart2 = actionParts2[j];
-            //             actions.Add(act);
-            //         }
-            //     }
-            // }
             return actions;
         }
 
@@ -223,15 +208,15 @@ public class AI : Hand
             public int score;
             public ActionPossible act;
         }
-        public MinimaxResult Minimax(bool player, int depth)
+        public MinimaxResult Minimax(bool player, int depth, ActionPossible prevActionPossible = new())
         {
             List<ActionPossible> acts = GetActions(player);
-            Debug.Log(acts.Count);
             
             if (depth <= 0 || acts.Count <= 0)
             {
                 MinimaxResult mmrTerminal = new MinimaxResult();
                 mmrTerminal.score = Utility();
+                mmrTerminal.act = prevActionPossible;
                 return mmrTerminal;
             }
 
@@ -241,23 +226,25 @@ public class AI : Hand
             mmr.score = score;
             for (int i = 0; i < acts.Count; i ++)
             {
-                ActionPossible actionPossible = acts[i];
-                for (int j = 0; j < actionPossible.actParts2.Count; j++)
+                ActionPossible currActionPossible = acts[i];
+                for (int j = 0; j < currActionPossible.actParts2.Count; j++)
                 {
                     GameStateAI gsai = new GameStateAI(this);
                     Action act = new Action();
-                    act.actPart1 = actionPossible.actPart1;
-                    act.actPart2 = actionPossible.actParts2[j];
+                    act.actPart1 = currActionPossible.actPart1;
+                    act.actPart2 = currActionPossible.actParts2[j];
                     gsai.ApplyAction(act);
 
-                    MinimaxResult currMmr = gsai.Minimax(!player,depth-1);
-                    currMmr.act = actionPossible;
+                    MinimaxResult currMmr = gsai.Minimax(!player,depth-1,currActionPossible);
+                    currMmr.act.actPart1 = currActionPossible.actPart1;
                     if (player)
                     {
+                        currMmr.act.actParts2 = prevActionPossible.actParts2;
                         if (currMmr.score > mmr.score) mmr = currMmr;
                     }
                     else
                     {
+                        currMmr.act.actParts2 = currActionPossible.actParts2;
                         if (currMmr.score < mmr.score) mmr = currMmr;
                     }
                 }
@@ -280,6 +267,7 @@ public class AI : Hand
             GameStateAI gsai = new GameStateAI();
             gsai.aiCards = new List<Card>(this.Cards);
             gsai.playerAndDeckCards = new List<Card>(GameManager.instance.player.Cards.Concat(deck.Cards).ToList());
+            gsai.aiAndDeckCards = new List<Card>(GameManager.instance.ai.Cards.Concat(deck.Cards).ToList());
             gsai.deckCards = new List<Card>(deck.Cards);
             gsai.aiYakusCards = new List<Card>(this.yakus.Cards);
             gsai.playerYaskusCards = new List<Card>(GameManager.instance.player.yakus.Cards);
@@ -333,10 +321,11 @@ public class AI : Hand
         card.SetUICard(uiCard);
         uiCard.Init(this, card, gObject.GetComponent<Canvas>());
         card.GetUI().Display();
+        
         GameStateAI.ActionPart actPart2 = new GameStateAI.ActionPart();
         for (int i = 0; i < act.actParts2.Count; i++)
         {
-            if (act.actParts2[i].card1 == card)
+            if (act.actParts2[i].card1.Equals(card))
             {
                 actPart2 = act.actParts2[i];
                 break;

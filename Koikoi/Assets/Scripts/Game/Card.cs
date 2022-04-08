@@ -46,6 +46,17 @@ public class Card : ScriptableObject
         ClassicKasu
     }
 
+    public override bool Equals(object obj)
+    {
+        //Check for null and compare run-time types.
+        if (obj == null || ! GetType().Equals(obj.GetType()))
+        {
+            return false;
+        } else {
+            Card c = (Card) obj;
+            return month == c.month && type == c.type && specificity == c.specificity;
+        }
+    }
 
     public Month month;
     public Type type;
