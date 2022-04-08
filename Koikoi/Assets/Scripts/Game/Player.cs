@@ -21,19 +21,23 @@ public class Player :  Hand
                 selectedCard.GetUI().Show();
                 Board.DisplayAssociableCards(selectedCard);
             }
-            // Le Joueur drop sa carte sélectionnée
+            // Le Joueur souhaite drop sa carte sélectionnée
             else if (card.Equals(selectedCard))
             {
-                // Dépôt de la carte sélectionnée dans le board
-                AddCardToBoard(selectedCard);
-                RemoveCard(selectedCard);
+                // S'il n'y a aucune autre carte associable
+                if(canDropCard(card))
+                {
+                    // Dépôt de la carte sélectionnée dans le board
+                    AddCardToBoard(selectedCard);
+                    RemoveCard(selectedCard);
 
-                // Réinitialisation 
-                selectedCard = null;
-                Board.Cards.ForEach(c => c.GetUI().Hide());
+                    // Réinitialisation 
+                    selectedCard = null;
+                    Board.Cards.ForEach(c => c.GetUI().Hide());
 
-                // Affichage de la carte sur le deck, et des cartes du joueur associables
-                deck.DisplayOnTop();
+                    // Affichage de la carte sur le deck, et des cartes du joueur associables
+                    deck.DisplayOnTop();
+                }
             }
             // Le Joueur sélectionne une autre carte
             else
