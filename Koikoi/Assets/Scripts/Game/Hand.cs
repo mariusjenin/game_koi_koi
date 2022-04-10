@@ -49,35 +49,59 @@ public class Hand : CardZone
         return yakus.score.yakus.Count > lastYakusCount;
     }
 
-    public void AddCardToYakus(Card card)
+    public IEnumerator AddCardToYakus(Card card1, Card card2)
     {
-        StartCoroutine(AddCardToYakusCoroutine(card));
+        yield return StartCoroutine(AddCardToYakusCoroutine(card1, card2));
     }
 
-    private IEnumerator AddCardToYakusCoroutine(Card card)
+    private IEnumerator AddCardToYakusCoroutine(Card card1, Card card2)
     {
-
-        // Animation
-        switch (card.type)
+        Transform card1pos = card1.GetUI().transform;
+        Transform card2pos = card2.GetUI().transform;
+        Transform card1dest = null;
+        Transform card2dest = null;
+       
+        switch (card1.type)
         {
             case Card.Type.Hikari:
-                yield return StartCoroutine(GameManager.instance.AddCardCouroutine(card.GetUI().transform, yakus.HikariGrid.transform));
+                card1dest = yakus.HikariGrid.transform;
                 break;
             case Card.Type.Kasu:
-                yield return StartCoroutine(GameManager.instance.AddCardCouroutine(card.GetUI().transform, yakus.KasuGrid.transform));
+                card1dest = yakus.KasuGrid.transform;
                 break;
             case Card.Type.Tan:
-                yield return StartCoroutine(GameManager.instance.AddCardCouroutine(card.GetUI().transform, yakus.TanGrid.transform));
+                card1dest = yakus.TanGrid.transform;
                 break;
             case Card.Type.Tane:
-                yield return StartCoroutine(GameManager.instance.AddCardCouroutine(card.GetUI().transform, yakus.TaneGrid.transform));
+                card1dest = yakus.TaneGrid.transform;
                 break;
         }
 
-        Destroy(card.GetUI().canvas.gameObject);
+        switch (card2.type)
+        {
+            case Card.Type.Hikari:
+                card2dest = yakus.HikariGrid.transform;
+                break;
+            case Card.Type.Kasu:
+                card2dest = yakus.KasuGrid.transform;
+                break;
+            case Card.Type.Tan:
+                card2dest = yakus.TanGrid.transform;
+                break;
+            case Card.Type.Tane:
+                card2dest = yakus.TaneGrid.transform;
+                break;
+        }
+        // Animation
+        yield return StartCoroutine(GameManager.instance.AddCardCouroutine(card1pos, card1dest, card2pos, card2dest));
 
-        Destroy(card.GetUI().GetComponent<Button>());
-        yakus.AddCard(card);
+        Destroy(card1.GetUI().canvas.gameObject);
+        Destroy(card1.GetUI().GetComponent<Button>());
+        Destroy(card2.GetUI().canvas.gameObject);
+        Destroy(card2.GetUI().GetComponent<Button>());
+
+        yakus.AddCard(card1);
+        yakus.AddCard(card2);
     }
     
     public void AddCardToBoard(Card card)

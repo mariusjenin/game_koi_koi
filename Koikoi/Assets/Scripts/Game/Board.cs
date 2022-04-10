@@ -18,10 +18,9 @@ public class Board : CardZone
 
     public void AddCardsToYakus(Card boardCard, Card handCard, Hand hand)
     {
-        hand.AddCardToYakus(boardCard);
-        hand.AddCardToYakus(handCard);
-
         RemoveCard(boardCard);
-        hand.RemoveCard(handCard);            
+        hand.RemoveCard(handCard);
+
+        StartCoroutine(hand.AddCardToYakus(boardCard, handCard));
     }
 }

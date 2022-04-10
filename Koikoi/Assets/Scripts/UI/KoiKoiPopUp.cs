@@ -18,6 +18,7 @@ public class KoiKoiPopUp : MonoBehaviour
     private GameObject KoiKoiButton;
 
     public enum Type { PLAYER, KOIKOI, END, TIE};
+    public bool isShowed = false;
 
     private void Awake()
     {
@@ -97,6 +98,7 @@ public class KoiKoiPopUp : MonoBehaviour
         EndButton.GetComponent<Button>().enabled = false;
         KoiKoiButton.GetComponent<Button>().enabled = false;
         yield return StartCoroutine(Fade(1f, 0f, 0.2f));
+        GameManager.instance.ActivateButtons();
     }
 
     public IEnumerator HideAfterSeconds(float duration)
@@ -108,7 +110,6 @@ public class KoiKoiPopUp : MonoBehaviour
             yield return new WaitForSeconds(Time.deltaTime);
         }
         yield return StartCoroutine(Hide());
-        GameManager.instance.ActivateButtons();
     }
 
     public void onClickEndTurn()
@@ -123,11 +124,13 @@ public class KoiKoiPopUp : MonoBehaviour
 
     private IEnumerator onClickKoikoiCoroutine()
     {
+        isShowed = false;
         yield return StartCoroutine(Hide());
         yield return StartCoroutine(GameManager.instance.Koikoi(true));
     }
     private IEnumerator onClickEndTurnCoroutine()
     {
+        isShowed = false;
         yield return StartCoroutine(Hide());
         yield return StartCoroutine(GameManager.instance.NextTurn(true));
     }

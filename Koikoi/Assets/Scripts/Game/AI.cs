@@ -273,7 +273,7 @@ public class AI : Hand
             gsai.aiYakusCards = new List<Card>(this.yakus.Cards);
             gsai.playerYaskusCards = new List<Card>(GameManager.instance.player.yakus.Cards);
             gsai.boardCards = new List<Card>(board.Cards);
-            AI.GameStateAI.ActionPossible actionPossible = gsai.Minimax(false, 1).act;
+            AI.GameStateAI.ActionPossible actionPossible = gsai.Minimax(false, 2).act;
 
             ExecuteAction(actionPossible);
 
@@ -301,8 +301,7 @@ public class AI : Hand
         if (act.actPart1.pairDone)
         {
             // Anime les deux cartes vers la bonne zone Yakus
-            AddCardToYakus(act.actPart1.card2);
-            AddCardToYakus(act.actPart1.card1);
+            StartCoroutine(AddCardToYakus(act.actPart1.card1, act.actPart1.card2));
             // Supprime les cartes de la main et du board
             board.RemoveCard(act.actPart1.card2);
         }
@@ -314,21 +313,21 @@ public class AI : Hand
         RemoveCard(act.actPart1.card1);
 
         //PART 2
-        Card card = GameManager.instance.deck.Draw();
+        Card deckCard = GameManager.instance.deck.Draw();
         // Création d'un template image à la position du deck
         Transform deckTransform = GameManager.instance.deck.transform;
         GameObject gObject = Instantiate(GameManager.instance.template, deckTransform.position, deckTransform.rotation,
             deckTransform.parent.transform);
         UICard uiCard = gObject.GetComponentInChildren<UICard>();
-        card.SetUICard(uiCard);
-        uiCard.Init(this, card, gObject.GetComponent<Canvas>());
-        card.GetUI().Display();
+        deckCard.SetUICard(uiCard);
+        uiCard.Init(this, deckCard, gObject.GetComponent<Canvas>());
+        deckCard.GetUI().Display();
 
         GameStateAI.ActionPart actPart2 = new GameStateAI.ActionPart();
         // bool found = false;
         for (int i = 0; i < act.actParts2.Count; i++)
         {
-            if (act.actParts2[i].card1.Equals(card))
+            if (act.actParts2[i].card1.Equals(deckCard))
             {
                 actPart2 = act.actParts2[i];
                 // found = true;
@@ -336,17 +335,18 @@ public class AI : Hand
             }
         }
         // Debug.Log("test " + found);
+        // actPart2.card1 est la carte tirée du deck, mais n'a pas d'UI d'initialisé, il faut préférer
+        // deckCard, qui elle a été instanciée par le template.
         if (actPart2.pairDone)
         {
             // Anime les deux cartes vers la bonne zone Yakus
-            AddCardToYakus(actPart2.card2);
-            AddCardToYakus(actPart2.card1);
+            StartCoroutine(AddCardToYakus(actPart2.card2, deckCard));
             // Supprime les cartes de la main et du board
             board.RemoveCard(actPart2.card2);
         }
         else
         {
-            AddCardToBoard(actPart2.card1);
+            AddCardToBoard(deckCard);
         }
     }
 }

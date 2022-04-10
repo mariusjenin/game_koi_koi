@@ -129,6 +129,7 @@ public class GameManager : MonoBehaviour
         // Réinitialisation de l'UI après fade out
         yield return StartCoroutine(Fade(BlackOverlay, BlackOverlay.color.a, 0f, 0.2f));
         koikoiPopUp.gameObject.SetActive(false);
+        if (isPlayer) ai.CanPlay(true);
     }
     public IEnumerator Tie()
     {
@@ -152,13 +153,17 @@ public class GameManager : MonoBehaviour
         // On vérifie si l'entité a un yaku
         if (hand.hasYakus())
         {
-            if (hand is Player) StartCoroutine(PopUpKoiKoi(KoiKoiPopUp.Type.PLAYER));
+            if (hand is Player)
+            {
+                StartCoroutine(PopUpKoiKoi(KoiKoiPopUp.Type.PLAYER));
+                koikoiPopUp.isShowed = true;
+            }
             else if (hand is AI) ((AI)hand).canKoikoi = true;
         }
 
         // On passe la main à l'autre entité
         hand.CanPlay(false);
-        if (hand is Player) ai.CanPlay(true);
+        if (hand is Player) ai.CanPlay(!koikoiPopUp.isShowed); // L'IA peut jouer si le popup du joueur n'est pas montré
         else player.CanPlay(true);
     }
 
@@ -211,14 +216,19 @@ public class GameManager : MonoBehaviour
         cz.AddCard(card);
     }
 
-    public IEnumerator AddCardCouroutine(Transform initial, Transform destination)
+    public IEnumerator AddCardCouroutine(Transform initial, Transform destination, Transform other=null, Transform otherDestination=null)
     {
-        while (Vector3.Distance(initial.position, destination.position) > 0.1f)
+        while (Vector3.Distance(initial.position, destination.position) > 0.1f
+            && (other==null || Vector3.Distance(other.position, destination.position) > 0.1f))
         {
             initial.position = Vector3.MoveTowards(initial.position, destination.position, speed / 0.4f);
+            if(other != null)
+                other.position = Vector3.MoveTowards(other.position, destination.position, speed / 0.4f);
             yield return new WaitForSeconds(0.01f);
         }
         initial.SetParent(destination);
+        if (other != null)
+            other.SetParent(destination);
 
     }
 

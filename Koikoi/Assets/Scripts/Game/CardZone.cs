@@ -25,13 +25,16 @@ namespace Game
 
         public void DesactivateButtons()
         {
-            Cards.ForEach(c => c.GetUI().GetComponent<Button>().interactable = false);
+            Cards.ForEach(c => {
+                if (c.GetUI() != null && c.GetUI().GetComponent<Button>() != null)
+                    c.GetUI().GetComponent<Button>().interactable = false;
+            });
         }
 
         public void ActivateButtons()
         {
             Cards.ForEach(c => {
-                if(c.GetUI() != null)
+                if(c.GetUI() != null && c.GetUI().GetComponent<Button>() != null)
                     c.GetUI().GetComponent<Button>().interactable = true;
                 });
         }
