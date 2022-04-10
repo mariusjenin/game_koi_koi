@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     // Singleton
     public static GameManager instance;
 
+    public SoundManager soundManager;
+
     // Values
     public int MaxTurn = 12;
     public bool koikoi = false;
@@ -218,6 +220,8 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator AddCardCouroutine(Transform initial, Transform destination, Transform other=null, Transform otherDestination=null)
     {
+        soundManager.PlayCardSound(other!=null);
+
         while (Vector3.Distance(initial.position, destination.position) > 0.1f
             && (other==null || Vector3.Distance(other.position, destination.position) > 0.1f))
         {
