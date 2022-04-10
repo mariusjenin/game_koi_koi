@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         StartCoroutine(InitGame());
+        soundManager.music.Play();
     }
 
     private void ClearGame()

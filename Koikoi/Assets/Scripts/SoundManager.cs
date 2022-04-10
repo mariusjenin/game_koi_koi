@@ -9,6 +9,8 @@ public class SoundManager : MonoBehaviour
     public AudioSource cardSource;
     public AudioSource otherCardSource;
 
+    public Music music;
+
     public void PlayCardSound(bool twice)
     {
         int random = Random.Range(0, cardClips.Count);
