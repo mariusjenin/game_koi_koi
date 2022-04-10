@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0173cab331a0594b9278d51670cc646, type: 3}
   m_Name: Kasu_7_2
   m_EditorClassIdentifier: 
+  numInMonth: 2
   month: 6
   type: 3
-  id: 0
   sprite: {fileID: 21300000, guid: 40d3236b9da3a0642a5fb6ade87fcaa5, type: 3}
   specificity: 12

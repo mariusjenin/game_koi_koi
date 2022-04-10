@@ -39,6 +39,10 @@ namespace Game
             yakus = new List<Yaku>();
             SetCards(c);
         }
+        public ScoreManager()
+        {
+            yakus = new List<Yaku>();
+        }
 
         public void SetCards(List<Card> c)
         {

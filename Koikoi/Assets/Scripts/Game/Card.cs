@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Card", menuName = "Card")]
 public class Card : ScriptableObject
 {
+    
     public enum Month
     {
         January,
@@ -54,10 +55,11 @@ public class Card : ScriptableObject
             return false;
         } else {
             Card c = (Card) obj;
-            return sprite != c.sprite && month == c.month && type == c.type && specificity == c.specificity;
+            return numInMonth == c.numInMonth && month == c.month && type == c.type && specificity == c.specificity;
         }
     }
 
+    public int numInMonth;
     public Month month;
     public Type type;
     public Sprite sprite;
