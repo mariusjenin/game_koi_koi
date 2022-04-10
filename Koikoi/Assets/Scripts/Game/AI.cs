@@ -260,10 +260,10 @@ public class AI : Hand
     public override void CanPlay(bool canPlay)
     {
         base.CanPlay(canPlay);
-        if (canPlay) Play();
+        if (canPlay) StartCoroutine(Play());
     }
 
-    public void Play()
+    public IEnumerator Play()
     {
         if (canPlay)
         {
@@ -275,7 +275,7 @@ public class AI : Hand
             gsai.boardCards = new List<Card>(board.Cards);
             AI.GameStateAI.ActionPossible actionPossible = gsai.Minimax(false, 1).act;
 
-            ExecuteAction(actionPossible);
+            yield return ExecuteAction(actionPossible);
 
             // Au tour du joueur de jouer
             GameManager.instance.HandFinishTurn(this);
@@ -294,14 +294,14 @@ public class AI : Hand
         }
     }
 
-    private void ExecuteAction(AI.GameStateAI.ActionPossible act)
+    private IEnumerator ExecuteAction(AI.GameStateAI.ActionPossible act)
     {
         //PART 1
         act.actPart1.card1.GetUI().Display();
         if (act.actPart1.pairDone)
         {
             // Anime les deux cartes vers la bonne zone Yakus
-            StartCoroutine(AddCardToYakus(act.actPart1.card1, act.actPart1.card2));
+            yield return StartCoroutine(AddCardToYakus(act.actPart1.card1, act.actPart1.card2));
             // Supprime les cartes de la main et du board
             board.RemoveCard(act.actPart1.card2);
         }
@@ -327,7 +327,7 @@ public class AI : Hand
         // bool found = false;
         for (int i = 0; i < act.actParts2.Count; i++)
         {
-            if (act.actParts2[i].card1.Equals(deckCard))
+            if (act.actParts2[i].card1.isSame(deckCard))
             {
                 actPart2 = act.actParts2[i];
                 // found = true;
@@ -340,7 +340,7 @@ public class AI : Hand
         if (actPart2.pairDone)
         {
             // Anime les deux cartes vers la bonne zone Yakus
-            StartCoroutine(AddCardToYakus(actPart2.card2, deckCard));
+            yield return StartCoroutine(AddCardToYakus(actPart2.card2, deckCard));
             // Supprime les cartes de la main et du board
             board.RemoveCard(actPart2.card2);
         }

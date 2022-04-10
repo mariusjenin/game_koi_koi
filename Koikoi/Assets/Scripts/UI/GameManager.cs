@@ -37,6 +37,8 @@ public class GameManager : MonoBehaviour
     public AI ai;
     public Board board;
 
+    private bool reseting = false;
+
 
     private void Awake()
     {
@@ -72,29 +74,34 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator InitGame()
     {
-        ClearGame();
-
-        player.CanPlay(false);
-        for (int i = 0; i < 2; i++)
+        if(!reseting)
         {
-            for (int j = 0; j < 4; j++)
+            reseting = true;
+            ClearGame();
+
+            player.CanPlay(false);
+            for (int i = 0; i < 2; i++)
             {
-                yield return StartCoroutine(NewCard(ai));
+                for (int j = 0; j < 4; j++)
+                {
+                    yield return StartCoroutine(NewCard(ai));
+                }
+
+                for (int j = 0; j < 4; j++)
+                {
+                    yield return StartCoroutine(NewCard(player));
+                }
+
+                for (int j = 0; j < 4; j++)
+                {
+                    yield return StartCoroutine(NewCard(board));
+                }
             }
 
-            for (int j = 0; j < 4; j++)
-            {
-                yield return StartCoroutine(NewCard(player));
-            }
-
-            for (int j = 0; j < 4; j++)
-            {
-                yield return StartCoroutine(NewCard(board));
-            }
+            IncreaseTurn();
+            player.CanPlay(true);
+            reseting = false;
         }
-
-        IncreaseTurn();
-        player.CanPlay(true);
     }
 
     public IEnumerator NextTurn(bool isPlayer)
@@ -224,16 +231,16 @@ public class GameManager : MonoBehaviour
         soundManager.PlayCardSound(other!=null);
 
         while (Vector3.Distance(initial.position, destination.position) > 0.1f
-            && (other==null || Vector3.Distance(other.position, destination.position) > 0.1f))
+            && (other==null || Vector3.Distance(other.position, otherDestination.position) > 0.1f))
         {
             initial.position = Vector3.MoveTowards(initial.position, destination.position, speed / 0.4f);
             if(other != null)
-                other.position = Vector3.MoveTowards(other.position, destination.position, speed / 0.4f);
+                other.position = Vector3.MoveTowards(other.position, otherDestination.position, speed / 0.4f);
             yield return new WaitForSeconds(0.01f);
         }
         initial.SetParent(destination);
         if (other != null)
-            other.SetParent(destination);
+            other.SetParent(otherDestination);
 
     }
 
