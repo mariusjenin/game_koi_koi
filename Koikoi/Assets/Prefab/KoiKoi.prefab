@@ -2060,6 +2060,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8179103968894207844}
     m_Modifications:
+    - target: {fileID: 323819812, guid: 5db4fc65af6f77f42bb296366661e64a, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 323819812, guid: 5db4fc65af6f77f42bb296366661e64a, type: 3}
+      propertyPath: m_OverrideSorting
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 475981002, guid: 5db4fc65af6f77f42bb296366661e64a, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 475981002, guid: 5db4fc65af6f77f42bb296366661e64a, type: 3}
+      propertyPath: m_OverrideSorting
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 657458355, guid: 5db4fc65af6f77f42bb296366661e64a, type: 3}
       propertyPath: Player
       value: 
@@ -2654,6 +2670,14 @@ PrefabInstance:
 
 '
       objectReference: {fileID: 0}
+    - target: {fileID: 8685773498742307008, guid: 5db4fc65af6f77f42bb296366661e64a, type: 3}
+      propertyPath: m_fontSize
+      value: 26
+      objectReference: {fileID: 0}
+    - target: {fileID: 8685773498742307008, guid: 5db4fc65af6f77f42bb296366661e64a, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8685773498751245706, guid: 5db4fc65af6f77f42bb296366661e64a, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2728,9 +2752,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8685773499125144119, guid: 5db4fc65af6f77f42bb296366661e64a, type: 3}
       propertyPath: m_text
-      value: '0
-
-'
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8685773499125144119, guid: 5db4fc65af6f77f42bb296366661e64a, type: 3}
+      propertyPath: m_fontSize
+      value: 26
+      objectReference: {fileID: 0}
+    - target: {fileID: 8685773499125144119, guid: 5db4fc65af6f77f42bb296366661e64a, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8685773499340068406, guid: 5db4fc65af6f77f42bb296366661e64a, type: 3}
       propertyPath: m_LocalPosition.z
