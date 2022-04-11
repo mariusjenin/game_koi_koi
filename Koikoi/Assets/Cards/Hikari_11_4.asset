@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0173cab331a0594b9278d51670cc646, type: 3}
   m_Name: Hikari_11_4
   m_EditorClassIdentifier: 
+  heuristicScore: 3
   numInMonth: 4
   month: 10
   type: 0

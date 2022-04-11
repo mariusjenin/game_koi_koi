@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0173cab331a0594b9278d51670cc646, type: 3}
   m_Name: Kasu_1_1
   m_EditorClassIdentifier: 
+  heuristicScore: 1
   numInMonth: 1
   month: 0
   type: 3

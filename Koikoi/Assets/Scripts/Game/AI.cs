@@ -13,6 +13,8 @@ public class AI : Hand
 
     public bool canKoikoi = false;
 
+    // public static int caseComputed;
+    
     struct GameStateAI
     {
         public struct Action
@@ -27,21 +29,33 @@ public class AI : Hand
             public bool playerTarget;
             public ActionPart1 actPart1;
             public List<ActionPart2> actParts2;
+
         }
 
-        public struct ActionPart1
+        public abstract class ActionPart : IComparable<ActionPart>
         {
+            public bool player;
             public bool pairDone;
+            public bool wholeMonth;
             public Card card1;
             public Card card2;
+            public Card card3;
+            public Card card4;
+            public int score;
+            public int CompareTo(ActionPart other)
+            {
+                return score==other.score?0:(player ? score < other.score : score > other.score)?1:-1;
+            }
         }
         
-        public struct ActionPart2
+        public class ActionPart1: ActionPart
         {
-            public bool pairDone;
-            public Card card1;
-            public Card card2;
-            public int score;
+            public List<Card> cardsAfterAction;
+        }
+        
+        public class ActionPart2 : ActionPart
+        {
+            
         }
 
         //HAND
@@ -89,16 +103,26 @@ public class AI : Hand
 
             if (act.actPart1.pairDone)
             {
-                if (act.playerTarget)
+                List<Card> yakusCard = act.playerTarget ? playerYaskusCards : aiYakusCards;
+                yakusCard.Add(act.actPart1.card1);
+                yakusCard.Add(act.actPart1.card2);
+                if (act.actPart1.wholeMonth)
                 {
-                    playerYaskusCards.Add(act.actPart1.card1);
-                    playerYaskusCards.Add(act.actPart1.card2);
+                    yakusCard.Add(act.actPart1.card3);
+                    yakusCard.Add(act.actPart1.card4); 
+                    boardCards.Remove(act.actPart1.card3);
+                    boardCards.Remove(act.actPart1.card4);
                 }
-                else
-                {
-                    aiYakusCards.Add(act.actPart1.card1);
-                    aiYakusCards.Add(act.actPart1.card2);
-                }
+                // if (act.playerTarget)
+                // {
+                //     playerYaskusCards.Add(act.actPart1.card1);
+                //     playerYaskusCards.Add(act.actPart1.card2);
+                // }
+                // else
+                // {
+                //     aiYakusCards.Add(act.actPart1.card1);
+                //     aiYakusCards.Add(act.actPart1.card2);
+                // }
 
                 boardCards.Remove(act.actPart1.card2);
             }
@@ -111,16 +135,27 @@ public class AI : Hand
             playerAndDeckCards.Remove(act.actPart2.card1);
             if (act.actPart2.pairDone)
             {
-                if (act.playerTarget)
+                List<Card> yakusCard = act.playerTarget ? playerYaskusCards : aiYakusCards;
+                yakusCard.Add(act.actPart2.card1);
+                yakusCard.Add(act.actPart2.card2);
+                if (act.actPart2.wholeMonth)
                 {
-                    playerYaskusCards.Add(act.actPart2.card1);
-                    playerYaskusCards.Add(act.actPart2.card2);
+                    yakusCard.Add(act.actPart2.card3);
+                    yakusCard.Add(act.actPart2.card4);
+                    boardCards.Remove(act.actPart2.card3);
+                    boardCards.Remove(act.actPart2.card4);
                 }
-                else
-                {
-                    aiYakusCards.Add(act.actPart2.card1);
-                    aiYakusCards.Add(act.actPart2.card2);
-                }
+                
+                // if (act.playerTarget)
+                // {
+                //     playerYaskusCards.Add(act.actPart2.card1);
+                //     playerYaskusCards.Add(act.actPart2.card2);
+                // }
+                // else
+                // {
+                //     aiYakusCards.Add(act.actPart2.card1);
+                //     aiYakusCards.Add(act.actPart2.card2);
+                // }
 
                 boardCards.Remove(act.actPart2.card2);
             }
@@ -137,6 +172,11 @@ public class AI : Hand
             List<ActionPossible> actions = new List<ActionPossible>();
             List<ActionPart1> actionParts1 = new List<ActionPart1>();
 
+            
+            List<Card> yakusBeforeActions = player ? playerYaskusCards : aiYakusCards;
+            ScoreManager sm = new ScoreManager(yakusBeforeActions);
+            int scoreBeforeActions = sm.EvaluateScore();
+            
             //Part 1
             for (int i = 0; i < sourceCardPart1.Count; i++)
             {
@@ -145,10 +185,34 @@ public class AI : Hand
                 {
                     if (sourceCardPart1[i].month == boardCards[j].month)
                     {
+                        List<int> cardOfMonth = new List<int>();
+                        for (int k = 0; k < boardCards.Count; k++)
+                        {
+                            if (sourceCardPart1[i].month == boardCards[k].month) cardOfMonth.Add(k);
+                        }
+                        
                         ActionPart1 actPart1 = new ActionPart1();
+                        actPart1.player = player;
                         actPart1.pairDone = true;
                         actPart1.card1 = sourceCardPart1[i];
+                        // actPart1.wholeMonth = cardOfMonth.Count == 3;
+                        // actPart1.card2 = boardCards[cardOfMonth[0]];
+                        actPart1.wholeMonth = false; //TODO
                         actPart1.card2 = boardCards[j];
+                        
+                        List<Card> yakusAfterPart1 = new List<Card>(yakusBeforeActions);
+                        yakusAfterPart1.Add(actPart1.card1);
+                        yakusAfterPart1.Add(actPart1.card2);
+                        if (actPart1.wholeMonth)
+                        {
+                            actPart1.card3 = boardCards[cardOfMonth[1]];
+                            actPart1.card4 = boardCards[cardOfMonth[2]];
+                            yakusAfterPart1.Add(actPart1.card3);
+                            yakusAfterPart1.Add(actPart1.card4);
+                        }
+                        actPart1.cardsAfterAction = yakusAfterPart1;
+                        sm.SetCards(actPart1.cardsAfterAction);
+                        actPart1.score = sm.EvaluateScore();;
                         actionParts1.Add(actPart1);
                         found = true;
                     }
@@ -157,17 +221,20 @@ public class AI : Hand
                 if (!found)
                 {
                     ActionPart1 actPart1 = new ActionPart1();
+                    actPart1.player = player;
                     actPart1.pairDone = false;
                     actPart1.card1 = sourceCardPart1[i];
+                    actPart1.cardsAfterAction = new List<Card>(yakusBeforeActions);
+                    actPart1.score = scoreBeforeActions;
                     actionParts1.Add(actPart1);
                 }
             }
+            actionParts1.Sort();
 
             //Part 2
             for (int i = 0; i < actionParts1.Count; i++)
             {
                 List<Card> sourceCardPart2 = new List<Card>(playerAndDeckCards);
-                List<Card> yakusAfterPart1 = player ? playerYaskusCards : aiYakusCards;
                 
                 List<Card> board = new List<Card>(boardCards);
                 if (player)
@@ -178,8 +245,11 @@ public class AI : Hand
                 if (actionParts1[i].pairDone)
                 {
                     board.Remove(actionParts1[i].card2);
-                    yakusAfterPart1.Add(actionParts1[i].card1);
-                    yakusAfterPart1.Add(actionParts1[i].card2);
+                    if (actionParts1[i].wholeMonth)
+                    {
+                        board.Remove(actionParts1[i].card3);
+                        board.Remove(actionParts1[i].card4);
+                    }
                 }
                 else
                 {
@@ -189,9 +259,6 @@ public class AI : Hand
                 ActionPossible actionPossible = new ActionPossible();
                 actionPossible.actPart1 = actionParts1[i];
                 actionPossible.actParts2 = new List<ActionPart2>();
-                ScoreManager sm = new ScoreManager();
-                sm.SetCards(yakusAfterPart1);
-                int scoreAfterPart1 = sm.EvaluateScore();
                 for (int j = 0; j < sourceCardPart2.Count; j++)
                 {
                     bool found = false;
@@ -200,14 +267,31 @@ public class AI : Hand
                         
                         if (sourceCardPart2[j].month == board[k].month)
                         {
+                            List<int> cardOfMonth = new List<int>();
+                            for (int l = 0; l < board.Count; l++)
+                            {
+                                if (sourceCardPart2[j].month == board[l].month) cardOfMonth.Add(l);
+                            }
+                            
                             ActionPart2 actPart2 = new ActionPart2();
+                            actPart2.player = player;
                             actPart2.pairDone = true;
                             actPart2.card1 = sourceCardPart2[j];
+                            actPart2.wholeMonth = false; //TODO
                             actPart2.card2 = board[k];
+                            // actPart2.wholeMonth = cardOfMonth.Count == 3;
+                            // actPart2.card2 = board[cardOfMonth[0]];
                             
-                            List<Card> yakusAfterPart2 = new List<Card>(yakusAfterPart1);
+                            List<Card> yakusAfterPart2 = new List<Card>(actionPossible.actPart1.cardsAfterAction);
                             yakusAfterPart2.Add(actPart2.card1);
                             yakusAfterPart2.Add(actPart2.card2);
+                            if (actPart2.wholeMonth)
+                            {
+                                actPart2.card3 = boardCards[cardOfMonth[1]];
+                                actPart2.card4 = boardCards[cardOfMonth[2]];
+                                yakusAfterPart2.Add(actPart2.card3);
+                                yakusAfterPart2.Add(actPart2.card4);
+                            }
                             sm.SetCards(yakusAfterPart2);
                             actPart2.score = sm.EvaluateScore();
                             
@@ -219,13 +303,15 @@ public class AI : Hand
                     if (!found)
                     {
                         ActionPart2 actPart2 = new ActionPart2();
+                        actPart2.player = player;
                         actPart2.pairDone = false;
                         actPart2.card1 = sourceCardPart2[j];
-                        actPart2.score = scoreAfterPart1;
+                        actPart2.score = actionPossible.actPart1.score;
                         actionPossible.actParts2.Add(actPart2);
                     }
                 }
-
+                actionPossible.actParts2.Sort();
+                
                 actions.Add(actionPossible);
             }
 
@@ -239,7 +325,15 @@ public class AI : Hand
             public ActionPossible act;
         }
 
-        public MinimaxResult Minimax(bool player, int depth, ActionPossible prevActionPossible = new())
+        public MinimaxResult Minimax()
+        {
+            
+            // caseComputed = 0;
+            MinimaxResult mmr = MinimaxAux(false, 2, -2147483648, 2147483647);
+            // Debug.Log(caseComputed);
+            return mmr;
+        }
+        public MinimaxResult MinimaxAux(bool player, int depth,int alpha, int beta, ActionPossible prevActionPossible = new())
         {
             List<ActionPossible> acts = GetActions(player);
 
@@ -247,7 +341,7 @@ public class AI : Hand
             {
                 MinimaxResult mmrTerminal = new MinimaxResult();
                 mmrTerminal.score = Utility();
-                // mmrTerminal.act = prevActionPossible;
+                // caseComputed++;
                 return mmrTerminal;
             }
 
@@ -255,6 +349,7 @@ public class AI : Hand
             int score = player ? -2147483648 : 2147483647;
             MinimaxResult mmr = new MinimaxResult();
             mmr.score = score;
+            bool stop = false;
             for (int i = 0; i < acts.Count; i++)
             {
                 ActionPossible currActionPossible = acts[i];
@@ -266,19 +361,33 @@ public class AI : Hand
                     act.actPart2 = currActionPossible.actParts2[j];
                     gsai.ApplyAction(act);
 
-                    MinimaxResult currMmr = gsai.Minimax(!player, depth - 1, currActionPossible);
+                    MinimaxResult currMmr = gsai.MinimaxAux(!player, depth - 1,alpha, beta, currActionPossible);
                     currMmr.act.actPart1 = currActionPossible.actPart1;
                     if (player)
                     {
                         currMmr.act.actParts2 = prevActionPossible.actParts2;
                         if (currMmr.score > mmr.score) mmr = currMmr;
+                        if (mmr.score > alpha) alpha = mmr.score;
+                        if (mmr.score >= beta)
+                        {
+                            stop = true;
+                            break;
+                        }
                     }
                     else
                     {
                         currMmr.act.actParts2 = currActionPossible.actParts2;
                         if (currMmr.score < mmr.score) mmr = currMmr;
+                        if (mmr.score < beta) beta = mmr.score;
+                        if (mmr.score <= alpha)
+                        {
+                            stop = true;
+                            break;
+                        }
                     }
                 }
+
+                if (stop) break;
             }
 
             return mmr;
@@ -296,12 +405,12 @@ public class AI : Hand
         if (canPlay)
         {
             GameStateAI gsai = new GameStateAI();
-            gsai.aiCards = new List<Card>(this.Cards);
+            gsai.aiCards = new List<Card>(Cards);
             gsai.playerAndDeckCards = new List<Card>(GameManager.instance.player.Cards.Concat(deck.Cards).ToList());
-            gsai.aiYakusCards = new List<Card>(this.yakus.Cards);
-            gsai.playerYaskusCards = new List<Card>(GameManager.instance.player.yakus.Cards);
             gsai.boardCards = new List<Card>(board.Cards);
-            AI.GameStateAI.ActionPossible actionPossible = gsai.Minimax(false, 2).act;
+            gsai.aiYakusCards = new List<Card>(yakus.Cards);
+            gsai.playerYaskusCards = new List<Card>(GameManager.instance.player.yakus.Cards);
+            AI.GameStateAI.ActionPossible actionPossible = gsai.Minimax().act;
 
             yield return ExecuteAction(actionPossible);
 
