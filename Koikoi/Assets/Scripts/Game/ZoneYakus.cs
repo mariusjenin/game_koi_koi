@@ -12,19 +12,13 @@ namespace Game
         public GameObject TanGrid;
         public GameObject KasuGrid;
 
-        public ScoreManager score;
+        public ScoreManager scoreManager;
 
-        private int mScore;
-        public void UpdateScore()
+        public int GetScore()
         {
-            this.score.SetCards(Cards);
-            int newScore = score.EvaluateScore();
-            mScore += newScore;
-        }
-        public int GetScore(bool shouldUpdate)
-        {
-            if (shouldUpdate) UpdateScore();
-            return mScore;
+            scoreManager.SetCards(Cards);
+            int score = scoreManager.EvaluateScore();
+            return score;
         }
     }
 }

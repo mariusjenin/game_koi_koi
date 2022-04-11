@@ -150,7 +150,7 @@ namespace Game
                         score += 5 - (nbTane - 3);
                         break;
                     case Yaku.Tane:
-                        score += 5 - (nbTane - 5);
+                        score += 1 - (nbTane - 5);
                         break;
                     case Yaku.AotanAkatanNoChofuku:
                         score += 10;
@@ -163,7 +163,7 @@ namespace Game
                         score += 1 + (nbTan - 5);
                         break;
                     case Yaku.Kasu:
-                        score += 1 + (nbKasu - 1);
+                        score += 1 + (nbKasu - 10);
                         break;
                 }
             }

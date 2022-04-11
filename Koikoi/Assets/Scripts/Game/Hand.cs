@@ -9,11 +9,12 @@ public class Hand : CardZone
     public Deck deck;
     public ZoneYakus yakus;
     public int lastYakusCount = 0;
+    public int score;
 
     protected bool canPlay = false;
     private void Awake()
     {
-        yakus.score = new ScoreManager(yakus.Cards);
+        yakus.scoreManager = new ScoreManager(yakus.Cards);
     }
 
     public override void Reset()
@@ -45,8 +46,8 @@ public class Hand : CardZone
 
     public bool hasYakus()
     {
-        yakus.score.UpdateYakus();
-        return yakus.score.yakus.Count > lastYakusCount;
+        yakus.scoreManager.UpdateYakus();
+        return yakus.scoreManager.yakus.Count > lastYakusCount;
     }
 
     public IEnumerator AddCardToYakus(Card card1, Card card2)
