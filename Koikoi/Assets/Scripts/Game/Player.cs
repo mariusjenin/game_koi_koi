@@ -56,5 +56,7 @@ public class Player :  Hand
 
         if (canPlay) GameManager.instance.ActivateButtons();
         else GameManager.instance.DesactivateButtons();
+
+        checkForTie();
     }
 }

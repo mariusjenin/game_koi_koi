@@ -174,6 +174,12 @@ public class GameManager : MonoBehaviour
         // On vérifie si l'entité a un yaku
         if (hand.hasYakus())
         {
+            
+            hand.yakus.scoreManager.UpdateYakus();
+            for (int i = 0; i < hand.yakus.scoreManager.yakus.Count; i++)
+            {
+                Debug.Log(hand.yakus.scoreManager.yakus[i]);
+            }
             if (hand is Player)
             {
                 StartCoroutine(PopUpKoiKoi(KoiKoiPopUp.Type.PLAYER));
@@ -213,7 +219,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            ai.score += player.yakus.GetScore();
+            ai.score += ai.yakus.GetScore();
             AIScore.SetText("" + ai.score);
         }
     }

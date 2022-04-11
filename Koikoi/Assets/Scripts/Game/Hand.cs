@@ -4,7 +4,7 @@ using Game;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Hand : CardZone
+public abstract class Hand : CardZone
 {
     public Deck deck;
     public ZoneYakus yakus;
@@ -39,7 +39,10 @@ public class Hand : CardZone
     public virtual void CanPlay(bool canPlay)
     {
         this.canPlay = canPlay;
+    }
 
+    public void checkForTie()
+    {
         if (canPlay && Cards.Count == 0 && GameManager.instance.CheckForTie()) 
             StartCoroutine(GameManager.instance.Tie());
     }
