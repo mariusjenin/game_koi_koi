@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     public int MaxTurn = 12;
     public bool koikoi = false;
 
-    private float speed = 20;
+    private float speed = 15;
 
     // UI GameObjects
     public TextMeshProUGUI Turn;
@@ -74,32 +74,43 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator InitGame()
     {
-        if(!reseting)
+        if (!reseting)
         {
             reseting = true;
-            ClearGame();
 
-            player.CanPlay(false);
-            for (int i = 0; i < 2; i++)
+            int CurrentTurn = Int32.Parse(Turn.text);
+
+            if(CurrentTurn == MaxTurn)
             {
-                for (int j = 0; j < 4; j++)
+                // END Game
+            } 
+            else
+            {
+                ClearGame();
+
+                player.CanPlay(false);
+                for (int i = 0; i < 2; i++)
                 {
-                    yield return StartCoroutine(NewCard(ai));
+                    for (int j = 0; j < 4; j++)
+                    {
+                        yield return StartCoroutine(NewCard(ai));
+                    }
+
+                    for (int j = 0; j < 4; j++)
+                    {
+                        yield return StartCoroutine(NewCard(player));
+                    }
+
+                    for (int j = 0; j < 4; j++)
+                    {
+                        yield return StartCoroutine(NewCard(board));
+                    }
                 }
 
-                for (int j = 0; j < 4; j++)
-                {
-                    yield return StartCoroutine(NewCard(player));
-                }
-
-                for (int j = 0; j < 4; j++)
-                {
-                    yield return StartCoroutine(NewCard(board));
-                }
+                IncreaseTurn();
+                player.CanPlay(true);
             }
 
-            IncreaseTurn();
-            player.CanPlay(true);
             reseting = false;
         }
     }
@@ -228,14 +239,20 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator AddCardCouroutine(Transform initial, Transform destination, Transform other=null, Transform otherDestination=null)
     {
-        soundManager.PlayCardSound(other!=null);
+        float startOtherDistance = 0f;
+
+        float startInitialDistance = Vector3.Distance(initial.position, destination.position);
+        if(other != null)
+            startOtherDistance = Vector3.Distance(other.position, otherDestination.position);
+
+        soundManager.PlayCardSound(other != null);
 
         while (Vector3.Distance(initial.position, destination.position) > 0.1f
             && (other==null || Vector3.Distance(other.position, otherDestination.position) > 0.1f))
         {
-            initial.position = Vector3.MoveTowards(initial.position, destination.position, speed / 0.4f);
+            initial.position = Vector3.MoveTowards(initial.position, destination.position, (startInitialDistance/100) * speed);
             if(other != null)
-                other.position = Vector3.MoveTowards(other.position, otherDestination.position, speed / 0.4f);
+                other.position = Vector3.MoveTowards(other.position, otherDestination.position, (startOtherDistance / 100) * speed);
             yield return new WaitForSeconds(0.01f);
         }
         initial.SetParent(destination);
