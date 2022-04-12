@@ -120,17 +120,4 @@ public abstract class Hand : CardZone
 
         StartCoroutine(GameManager.instance.AddCardCouroutine(card.GetUI().canvas.gameObject.transform, GameManager.instance.BoardGrid.transform));
     }
-
-    protected bool canDropCard(Card card)
-    {
-        bool canDrop = true;
-        GameManager.instance.board.Cards.ForEach(c =>
-        {
-            if (canDrop && c.month.Equals(card.month))
-            {
-                canDrop = false;
-            }
-        });
-        return canDrop;
-    }
 }

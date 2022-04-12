@@ -60,7 +60,10 @@ public class UICard : MonoBehaviour
 
     void OnClickDeck()
     {
-        StartCoroutine(DeckCoroutine());
+        Board board = GameManager.instance.board;
+        Card card = GameManager.instance.deck.topCard;
+        if(board.canDropCard(card))
+            StartCoroutine(DeckCoroutine());
     }
     public IEnumerator BoardCoroutine(Player player, AI ai, Deck deck)
     {

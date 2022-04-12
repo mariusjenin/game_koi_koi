@@ -25,7 +25,7 @@ public class Player :  Hand
             else if (card.Equals(selectedCard))
             {
                 // S'il n'y a aucune autre carte associable
-                if(canDropCard(card))
+                if(Board.canDropCard(card))
                 {
                     // Dépôt de la carte sélectionnée dans le board
                     AddCardToBoard(selectedCard);

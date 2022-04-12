@@ -23,4 +23,16 @@ public class Board : CardZone
 
         StartCoroutine(hand.AddCardToYakus(boardCard, handCard));
     }
+    public bool canDropCard(Card card)
+    {
+        bool canDrop = true;
+        GameManager.instance.board.Cards.ForEach(c =>
+        {
+            if (canDrop && c.month.Equals(card.month))
+            {
+                canDrop = false;
+            }
+        });
+        return canDrop;
+    }
 }
