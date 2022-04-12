@@ -426,10 +426,10 @@ public class AI : Hand
                 canKoikoi = false;
                 // Affichage de la Décision du koikoi
                 // Koikoi :
-                StartCoroutine(GameManager.instance.Koikoi(false));
+                // StartCoroutine(GameManager.instance.Koikoi(false));
                 //
                 // Fin de tour :
-                // StartCoroutine(GameManager.instance.NextTurn(false));
+                StartCoroutine(GameManager.instance.NextTurn(false));
             }
         }
     }
